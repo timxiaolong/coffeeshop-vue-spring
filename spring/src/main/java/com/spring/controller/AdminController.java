@@ -1,9 +1,10 @@
 package com.spring.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import com.spring.entity.Admin;
+import com.spring.service.AdminService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -11,10 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author wyj
- * @since 2023-12-11
+ * @since 2023-12-12
  */
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
+    @Autowired
+    private AdminService adminService;
 
+    @PostMapping("/login")
+    public Admin Login(@RequestBody Admin admin){
+        return admin;
+    }
 }

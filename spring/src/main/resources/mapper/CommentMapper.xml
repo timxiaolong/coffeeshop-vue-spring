@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wms.mapper.CommentMapper">
+<mapper namespace="com.spring.mapper.CommentMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.wms.entity.Comment">
+    <resultMap id="BaseResultMap" type="com.spring.entity.Comment">
         <id column="commentid" property="commentid" />
         <result column="userid" property="userid" />
         <result column="itemid" property="itemid" />

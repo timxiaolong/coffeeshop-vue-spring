@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author wyj
- * @since 2023-12-11
+ * @since 2023-12-12
  */
 @Mapper
 public interface MenuMapper extends BaseMapper<Menu> {
