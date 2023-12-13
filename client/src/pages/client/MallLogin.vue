@@ -56,7 +56,7 @@ export default {
       axios({
         method: 'GET',
         params: {
-          name: name,
+          username: name,
           password: password
         }
       }).then(result => {
