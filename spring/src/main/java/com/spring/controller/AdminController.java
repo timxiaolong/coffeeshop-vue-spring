@@ -37,4 +37,10 @@ public class AdminController {
             return dbAdmin.get(0);
         }
     }
+
+    @PostMapping("/signin")
+    public boolean Signin(@RequestBody Admin admin){
+        adminService.save(admin);
+        return true;
+    }
 }

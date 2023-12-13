@@ -11,15 +11,18 @@
         <input class="password" type="password" placeholder="密码"/>
         <button @click="login">登录</button>
       </div>
-      <div class="formBox" v-show="curIndex===1">
-        <input ref="signEmail" type="text" placeholder="请输入注册的邮箱"/>
-        <input ref="signName" type="text" placeholder="请输入昵称"/>
-        <input ref="signPwd" type="password" placeholder="请输入密码"/>
-        <input ref="signRecipient" type="text" placeholder="请输入收件人姓名"/>
-        <input ref="signAddress" type="text" placeholder="请输入收件地址"/>
-        <input ref="signPhone" type="text" placeholder="请输入联系电话"/>
+      <form class="signin-form" v-show="curIndex===1">
+        <input class="username" type="text" placeholder="请输入昵称"/>
+        <input class="password" type="password" placeholder="请输入密码"/>
+        <input class="phonenumber" type="text" placeholder="请输入注册手机号"/>
         <button @click="signup">注册</button>
-      </div>
+      </form>
+<!--      <div class="formBox" v-show="curIndex===1">-->
+<!--        <input ref="signName" type="text" placeholder="请输入昵称"/>-->
+<!--        <input ref="signPwd" type="password" placeholder="请输入密码"/>-->
+<!--        <input ref="signEmail" type="text" placeholder="请输入注册手机号"/>-->
+<!--        <button @click="signup">注册</button>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -66,17 +69,27 @@ export default {
           localStorage.setItem('username',result.username)
           localStorage.setItem('role',result.role)
           localStorage.setItem('id',result.id)
-          alert("登陆成功")
-          setTimeout("location.href=\"#/mall/show/index\"",1500)
+          this.$message("登录成功")
+          setTimeout("location.href=\"#/mall/show/index\"",3000)
         }else {
-          alert("用户名或密码错误")
+          this.$message.error("用户名或密码错误")
         }
-      }).catch(error => {
-
+      }).catch(err => {
+        console.dir(err)
       })
     },
     signup() {
-
+      const form = document.querySelector('.signin-form')
+      const data = serialize(form,{hash:true, empty: true})
+      axios({
+        url:"http://localhost:8080/admin//signin",
+        method:"POST",
+        data:data
+      }).then(result =>{
+        console.log("success")
+      }).catch(err =>{
+        console.dir(err)
+      })
     }
   }
 }

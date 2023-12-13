@@ -101,18 +101,14 @@ public class CodeGenerater {
         /*
         cfg.setFileCreate(new IFileCreate() {
             @Override
-            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType,
-String filePath) {
-                //
-判断⾃定义⽂件夹是否需要创建
+            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType,String filePath) {
+                //判断⾃定义⽂件夹是否需要创建
                 checkDir("调⽤默认⽅法创建的⽬录，⾃定义⽬录⽤");
                 if (fileType == FileType.MAPPER) {
-                    //
-已经⽣成 mapper ⽂件判断存在，不想重新⽣成返回 false
+                    //已经⽣成 mapper ⽂件判断存在，不想重新⽣成返回 false
                     return !new File(filePath).exists();
                 }
-                //
-允许⽣成模板⽂件
+                //允许⽣成模板⽂件
                 return true;
             }
         });
