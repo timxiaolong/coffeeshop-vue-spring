@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -25,12 +26,15 @@ public class AdminController {
     private AdminService adminService;
 
     @GetMapping("/login")
-    public List<Admin> Login(@RequestBody Admin admin){
-//        LambdaQueryWrapper<Admin> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-//        lambdaQueryWrapper.like(Admin::getUsername,admin.getUsername());
-//        System.out.println(lambdaQueryWrapper);
-//        List<Admin> dbAdmin= adminService.list(lambdaQueryWrapper);
-//        return dbAdmin == null;
-        return adminService.list();
+    public Admin Login(@RequestParam("username") String username,@RequestParam("password") String password){
+        LambdaQueryWrapper<Admin> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.like(Admin::getUsername,username);
+        List<Admin> dbAdmin= adminService.list(lambdaQueryWrapper);
+        System.out.println(dbAdmin);
+        if (dbAdmin == null){
+            return null;
+        }else {
+            return dbAdmin.get(0);
+        }
     }
 }

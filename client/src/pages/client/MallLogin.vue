@@ -51,16 +51,26 @@ export default {
       this.curIndex = index;
     },
     login() {
-      const name = document.querySelector('.name')
-      const password = document.querySelector('.password')
+      console.log("login")
+      const name = document.querySelector('.name').value
+      const password = document.querySelector('.password').value
       axios({
+        url:'http://localhost:8080/admin/login',
         method: 'GET',
         params: {
           username: name,
           password: password
         }
       }).then(result => {
-
+        if (result != null){
+          localStorage.setItem('username',result.username)
+          localStorage.setItem('role',result.role)
+          localStorage.setItem('id',result.id)
+          alert("登陆成功")
+          setTimeout("location.href=\"#/mall/show/index\"",1500)
+        }else {
+          alert("用户名或密码错误")
+        }
       }).catch(error => {
 
       })
