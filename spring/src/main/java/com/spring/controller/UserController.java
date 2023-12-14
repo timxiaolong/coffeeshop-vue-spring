@@ -1,9 +1,15 @@
 package com.spring.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.spring.entity.Admin;
+import com.spring.entity.Message;
+import com.spring.entity.User;
+import com.spring.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +22,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/login")
+    public Message Login(@RequestParam("username") String name, @RequestParam("password") String password){
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.like(User::getName,name);
+        List<User> dbUser= userService.list(lambdaQueryWrapper);
+        System.out.println(dbUser);
+        if (dbUser == null){// 如果没找到
+            return new Message("账号或者密码不正确",400,null);
+        }else if (!dbUser.get(0).getPassword().equals(password)){//如果密码不对
+            return new Message("账号或密码不正确",400,null);
+        }else {
+            return new Message("登陆成功",200,dbUser.get(0));
+        }
+    }
+
+    @PostMapping("/signin")
+    public boolean Signin(@RequestBody User user){
+        userService.save(user);
+        return true;
+    }
 
 }

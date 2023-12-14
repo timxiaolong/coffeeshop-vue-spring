@@ -31,5 +31,8 @@ public class Menu implements Serializable {
     @ApiModelProperty(value = "商品价格")
     private BigDecimal price;
 
+    @ApiModelProperty(value = "商品照片")
+    private String picture;
+
 
 }

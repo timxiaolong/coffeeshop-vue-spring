@@ -9,6 +9,7 @@
       <div class="formBox" v-show="curIndex===0">
         <input class="name" type="text" placeholder="账号"/>
         <input class="password" type="password" placeholder="密码"/>
+        <el-checkbox v-model="checked">管理员</el-checkbox>
         <button @click="login">登录</button>
       </div>
       <form class="signin-form" v-show="curIndex===1">
@@ -43,7 +44,8 @@ export default {
   },
   data() {
     return {
-      curIndex: 0
+      curIndex: 0,
+      checked: false
     }
   },
   methods: {
@@ -57,32 +59,55 @@ export default {
       console.log("login")
       const name = document.querySelector('.name').value
       const password = document.querySelector('.password').value
-      axios({
-        url:'http://localhost:8080/admin/login',
-        method: 'GET',
-        params: {
-          username: name,
-          password: password
-        }
-      }).then(result => {
-        if (result != null){
-          localStorage.setItem('username',result.username)
-          localStorage.setItem('role',result.role)
-          localStorage.setItem('id',result.id)
-          this.$message("登录成功")
-          setTimeout("location.href=\"#/mall/show/index\"",3000)
-        }else {
-          this.$message.error("用户名或密码错误")
-        }
-      }).catch(err => {
-        console.dir(err)
-      })
+      if (this.checked){//如果是管理员
+        axios({
+          url:'http://localhost:8080/admin/login',
+          method:'GET',
+          params: {
+            username: name,
+            password: password
+          }
+        }).then(result =>{
+          if (result.status === 200){
+            this.$message("欢迎您，管理员")
+            // setTimeout("location.href=''",3000)
+            this.$router.push('/');
+            // location.href = '../admin/Backstage.vue'
+          }else {
+            this.$message.error("用户名或密码错误")
+          }
+        }).catch(err => {
+
+        })
+      }else {//普通用户
+        axios({
+          url:'http://localhost:8080/user/login',
+          method: 'GET',
+          params: {
+            username: name,
+            password: password
+          }
+        }).then(result => {
+          if (result.status === 200){
+            localStorage.setItem('username',result.param.username)
+            localStorage.setItem('role',result.param.phone)
+            localStorage.setItem('id',result.param.id)
+            this.$message("登录成功")
+            setTimeout("location.href=\"#/mall/show/index\"",3000)
+          }else {
+            this.$message.error("用户名或密码错误")
+          }
+        }).catch(err => {
+          console.dir(err)
+        })
+      }
+
     },
     signup() {
       const form = document.querySelector('.signin-form')
       const data = serialize(form,{hash:true, empty: true})
       axios({
-        url:"http://localhost:8080/admin//signin",
+        url:"http://localhost:8080/user//signin",
         method:"POST",
         data:data
       }).then(result =>{

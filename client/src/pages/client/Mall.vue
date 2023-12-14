@@ -2,7 +2,7 @@
   <div class="Mall">
     <header>
       <div class="container clear">
-        <span class="title" @click="navTo('/mall')">MoreMall 一站式选购平台</span>
+        <span class="title" @click="navTo('/mall')">一见倾心咖啡点单平台</span>
         <NoticeList :notices="notices"/>
         <div class="right" v-if="clientToken">
           <span class="name">欢迎您，{{clientName}}</span>
@@ -12,6 +12,7 @@
         <div class="right" v-else>
           <span @click="navTo('/login')">登录</span>
           <span @click="navTo('/login')">注册</span>
+          <span @click="navTo('/backstage')">我是管理员</span>
         </div>
       </div>
     </header>
@@ -28,8 +29,8 @@
           <span><i class="iconfont icon-fabulous" />用户反馈</span>
         </div>
         <div class="intro footerItem">
-          <p class="title">何为MoreMall</p>
-          <p class="intro-p">MoreMall原创生活类电商品牌，秉承网易一贯的严谨态度，我们深入世界各地，从源头全程严格把控商品生产环节，力求帮消费者甄选到优质的商品</p>
+          <p class="title">一见倾心</p>
+          <p class="intro-p">一见倾心咖啡厅，作为独具特色的原创咖啡品牌，秉承着对咖啡的匠心与热情。我们不断探索世界各地的咖啡产地，精心挑选最优质的咖啡豆，从栽培、采摘到烘焙全程严格把控，努力呈现顶级品质的咖啡。我们坚持精致独特的调配工艺，希望为顾客奉上一杯杯香醇浓郁、口感纯正的完美咖啡体验。</p>
           <div>
             关注我们：
             <img src="http://yanxuan.nosdn.127.net/60068701f3a380911f237c26c91b39d0.png" alt=""/>
@@ -40,7 +41,7 @@
         <div class="code footerItem">
           <p class="title">扫码下载APP</p>
           <img src="../../assets/img/code.png" alt=""/>
-          <span>下载领1000元新人礼包</span>
+          <span>下载领8.8元代金券</span>
         </div>
       </div>
     </div>
@@ -49,15 +50,15 @@
         <ul class="footerTop">
           <li>
             <img src="//yanxuan.nosdn.127.net/e6021a6fcd3ba0af3a10243b7a2fda0d.png" alt="" />
-            <span>30天无忧退换货</span>
+            <span>无微不至的服务</span>
           </li>
           <li>
             <img src="//yanxuan.nosdn.127.net/e09c44e4369232c7dd2f6495450439f1.png" alt="" />
-            <span>满88元免邮费</span>
+            <span>完美品质的保证</span>
           </li>
           <li>
             <img src="//yanxuan.nosdn.127.net/e72ed4de906bd7ff4fec8fa90f2c63f1.png" alt="" />
-            <span>XX品质保证</span>
+            <span>无忧的用心体验</span>
           </li>
         </ul>
         <div class="footerBottom">
@@ -65,14 +66,13 @@
             <li>关于我们</li>
             <li>帮助中心</li>
             <li>售后服务</li>
-            <li>配送与验收</li>
             <li>商务合作</li>
             <li>企业采购</li>
             <li>开放平台</li>
             <li>搜索推荐</li>
             <li>友情链接</li>
           </ul>
-          <p>XX公司版权所有 © 1996-2018   食品经营许可证：XXXXXXXXXXXXXXXXX</p>
+          <p>XX公司版权所有 © 1996-2023   食品经营许可证：XXXXXXXXXXXXXXXXX</p>
         </div>
       </div>
     </footer>
@@ -97,7 +97,8 @@ export default {
   },
   data () {
     return {
-      notices:['今日疯抢：牛皮防水男靴仅229元！直减2...','【福利】领1000元APP新人礼'],
+      notices:['今日特惠：拿铁买一送一',
+        '【福利】领8.8新会员券'],
       clientHeight:getClientSize().height,
       shouldShowBT:false
     }
