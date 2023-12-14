@@ -1,9 +1,9 @@
 <template>
   <div class="MallIndex">
     <FadeSwiper class="swiperBox" :width="clientWidth" height="420px">
-      <img class="banner" slot="item1" src="../../assets/img/banner1.jpg" />
-      <img class="banner" slot="item2" src="../../assets/img/banner2.jpg" />
-      <img class="banner" slot="item3" src="../../assets/img/banner3.jpg" />
+      <img class="banner" slot="item1" src="https://gd-hbimg.huaban.com/900036458a9dd56740fdbf94906e61c2574f97061b1b5-18rLTO" />
+      <img class="banner" slot="item2" src="https://gd-hbimg.huaban.com/6606f79dcd820cac696d5887aa509558a7a5f32baf8f5-RvEB7y" />
+      <img class="banner" slot="item3" src="https://gd-hbimg.huaban.com/c506212d92db2947d77a21e0075862fd405ce8c0f449b3-QRXIa7" />
     </FadeSwiper>
     <section class="newGoods section">
       <SectionHeader title="新品首发" tips="周一周四上新，为你寻觅世间好物" moreText="更多新品>"/>
@@ -58,7 +58,7 @@
       </div>
     </section>
     <section class="hotGoods section">
-      <SectionHeader title="人气推荐" tips="最火最潮商品，为您挑选" moreText="更多推荐>"/>
+      <SectionHeader title="人气推荐" tips="最新最热的饮品都在这里！" moreText="更多推荐>"/>
       <div class="content">
         <ul class="left">
           <GoodsItem
@@ -82,35 +82,35 @@
       </div>
     </section>
     <section class="maker section">
-      <SectionHeader title="品牌制造商" tips="工厂直达消费者，剔除品牌溢价" moreText="更多制造商>"/>
+      <SectionHeader title="咖啡文化墙" tips="了解咖啡知识，享受咖啡人生" moreText="更多信息>"/>
       <div class="content">
-        <ZoomImg imgSrc="http://yanxuan.nosdn.127.net/0266209ded1751f599fe0dc21bb33e02.jpg" class="left">
+        <ZoomImg imgSrc="https://wx3.sinaimg.cn/mw690/a2783d2fly1hktn5ammhvj22b02b0tmv.jpg" class="left">
           <div class="makerInfo" slot="otherEle">
-            <p class="large">Adidas制造商</p>
+            <p class="large">咖啡豆的故事</p>
             <hr/>
-            <p class="small">35元起</p>
+            <p class="small"></p>
           </div>
         </ZoomImg>
         <ZoomImg imgSrc="http://yanxuan.nosdn.127.net/7cd0c8ed77da498090fb67c288ef05be.jpg" class="center">
           <div class="makerInfo" slot="otherEle">
-            <p class="large">UGG制造商</p>
+            <p class="large">咖啡烘焙工艺解析</p>
             <hr/>
-            <p class="small">129元起</p>
+            <p class="small"></p>
           </div>
         </ZoomImg>
         <div class="right">
           <ZoomImg imgSrc="http://yanxuan.nosdn.127.net/d824afe357e61fbee097412c5894c6ce.jpg">
             <div class="makerInfo" slot="otherEle">
-              <p class="large">新秀丽制造商</p>
+              <p class="large">冲泡艺术与技巧</p>
               <hr/>
-              <p class="small">49元起</p>
+              <p class="small"></p>
             </div>
           </ZoomImg>
           <ZoomImg imgSrc="http://yanxuan.nosdn.127.net/cf5f4a0d110ca17b9e0a80e6f7e6184b.jpg">
             <div class="makerInfo" slot="otherEle">
-              <p class="large">MUJI制造商</p>
+              <p class="large">咖啡与时尚</p>
               <hr/>
-              <p class="small">12.9元起</p>
+              <p class="small"></p>
             </div>
           </ZoomImg>
         </div>
