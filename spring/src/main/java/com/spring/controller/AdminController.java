@@ -37,5 +37,4 @@ public class AdminController {
             return dbAdmin.get(0);
         }
     }
-
 }

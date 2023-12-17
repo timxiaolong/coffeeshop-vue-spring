@@ -1,6 +1,6 @@
 package com.spring.service;
 
-import com.spring.entity.Order;
+import com.spring.entity.Orders;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author wyj
  * @since 2023-12-12
  */
-public interface OrderService extends IService<Order> {
+public interface OrdersService extends IService<Orders> {
 
 }

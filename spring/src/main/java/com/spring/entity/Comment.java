@@ -32,7 +32,7 @@ public class Comment implements Serializable {
     private Integer itemid;
 
     @ApiModelProperty(value = "评分")
-    private Integer rating;
+    private String rating;
 
     @ApiModelProperty(value = "评论内容")
     private String commentcontent;

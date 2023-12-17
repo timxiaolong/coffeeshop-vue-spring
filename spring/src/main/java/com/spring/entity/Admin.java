@@ -35,6 +35,4 @@ public class Admin implements Serializable {
 
     @ApiModelProperty(value = "管理员角色(0：超级管理 1：普通管理)")
     private Integer role;
-
-
 }

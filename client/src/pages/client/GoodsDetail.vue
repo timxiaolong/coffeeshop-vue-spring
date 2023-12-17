@@ -24,53 +24,20 @@
       <section class="msgBox leftContainer">
         <ul class="tagList">
           <li :class="{selected:1}">
-            评价 {{commentList.size}}
+            评价 {{commList.size}}
           </li>
         </ul>
-        <div class="commentBody" >
-<!--          <div v-if="commentList.length>0">-->
-<!--            <ul class="commentList">-->
-<!--              <li v-for="item in commentList" :key="item.commentid">-->
-<!--                <div class="userInfo">-->
-<!--                  <span>{{ item.userid }}</span>-->
-<!--                </div>-->
-<!--                <div class="commentInfo">-->
-<!--                  <div class="starList">-->
-<!--                    <i-->
-<!--                      class="iconfont icon-collection_fill"-->
-<!--                      v-for="(star,index) in (item.score/20)"-->
-<!--                      :key="item.id+''+index"-->
-<!--                    />-->
-<!--                  </div>-->
-<!--&lt;!&ndash;                  <p class="specName">{{ item.specName }}</p>&ndash;&gt;-->
-<!--                  <p class="comment">{{ item.commentcontent }}</p>-->
-<!--                  <p class="time">{{ item.commenttime }}</p>-->
-<!--                </div>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </div>-->
-          <el-rate v-model="rating[0]"
-                   disabled
-                   show-score
-                   text-color="#ff9900"
-                   score-template="">
-          </el-rate>
-          <p>匿名用户</p><br/>
-          <p>好喝，每天都喝十杯</p>
+        <div class="commentBody" v-for="(item, index) in commList" :key = "index">
+          <el-rate
+            v-model="item.rating"
+            disabled
+            show-score
+            text-color="#ff9900"
+            :score-template="item.rating"
+          ></el-rate>
+          <p>{{ item.userid }}</p><br/>
+          <p>{{ item.commentcontent }}</p>
         </div>
-      </section>
-      <section class="typeGoods rightContainer">
-        <div class="title">相似商品</div>
-        <ul class="list">
-          <GoodsItem
-            v-for="(item,index) in filterList"
-            :key="+item.id"
-            :id="item.id"
-            :img="item.img"
-            :name="item.name"
-            :price="item.price"
-          />
-        </ul>
       </section>
     </div>
   </div>
@@ -83,6 +50,7 @@ import NumberInput from '../../components/NumberInput';
 import Radio from '../../components/Radio';
 import GoodsItem from '../../components/GoodsItem';
 import axios from "axios";
+import moment from "moment";
 
 export default {
   name: 'GoodsDetail',
@@ -98,15 +66,6 @@ export default {
     ]),
     id() {
       return this.$route.params.id;
-    },
-    goodsPrice() {
-      let unitPrice = 0;
-      this.specs.map((item, index) => {
-        if (item.id === this.temSpecId) {
-          unitPrice = Number(item.unitPrice);
-        }
-      })
-      return (this.num * unitPrice);
     },
     temStockNum() {
       let stockNum = 0;
@@ -128,6 +87,7 @@ export default {
       goodsImg: '',
       goodsName: '',
       goodsDesc: '',
+      goodsPrice: 0,
       specs: [],
       typeId: '',
       temSpecId: 0,
@@ -137,7 +97,7 @@ export default {
       tagList: ['评价'],
       curIndex: 0,
       rate: '',
-      commentList: [],
+      commList: [],
       goodsList: [],
       rating:[]
     }
@@ -149,20 +109,6 @@ export default {
     },
 
     getGoodsInfo(id) {
-      // const res = getGoodsInfo(id);
-      // res
-      // .then((data)=>{
-      //   this.goodsImg = data.img;
-      //   this.goodsName = data.name;
-      //   this.goodsDesc = data.desc;
-      //   this.specs = data.specs;
-      //   this.typeId = data.typeId;
-      //   this.temSpecId = data.specs[0].id;
-      //   this.getTypeGoodsList(data.typeId);
-      // })
-      // .catch((e)=>{
-      //   alert(e);
-      // })
       const id_i = Number(id)
       console.log(id)
       axios({
@@ -172,10 +118,11 @@ export default {
           id: id_i
         }
       }).then(data => {
-        console.log(data)
+        console.log(data.data)
         this.goodsImg = data.data.picture;
         this.goodsName = data.data.name;
         this.goodsDesc = data.data.describtion;
+        this.goodsPrice = data.data.price;
         // this.specs = data.specs;
         this.typeId = data.data.typeId;
         // this.temSpecId = data.specs[0].id;
@@ -222,37 +169,37 @@ export default {
         alert('请先登录！');
         return;
       }
-      const res = addOrder({
-        token: this.clientToken,
-        goodsDetailId: this.temSpecId,
-        num: this.num,
-        state: 1,
-        amount: this.goodsPrice
-      });
-      res
-        .then(() => {
-          alert('自动付款成功！请耐心等待包裹派送~')
-        })
-        .catch((e) => {
-          alert(e);
-        })
+      // const res = addOrder({
+      //   token: this.clientToken,
+      //   goodsDetailId: this.temSpecId,
+      //   num: this.num,
+      //   state: 1,
+      //   amount: this.goodsPrice
+      // });
+      // res
+      //   .then(() => {
+      //     alert('自动付款成功！请耐心等待包裹派送~')
+      //   })
+      //   .catch((e) => {
+      //     alert(e);
+      //   })
+      axios({
+        url:'http://localhost:8080/order/sendorder',
+        method:'POST',
+        data:{
+          ordertime: moment().format('YYYY-MM-DD HH:mm:ss'),
+          orderuserid: localStorage.getItem('id'),
+          orderusername: localStorage.getItem('username'),
+          pretime: moment().add(30,'m').format('YYYY-MM-DD HH:mm:ss'),
+          price: this.goodsPrice,
+          status:0
+        }
+      }).then(result =>{
+
+      })
     },
 
     getComment(goodsId) {
-      // const res = getComment(goodsId);
-      // res
-      // .then((data)=>{
-      //   if(Object.keys(data).length<=0){
-      //     this.rate = '';
-      //     this.commentList = [];
-      //     return;
-      //   }
-      //   this.rate = data.rate;
-      //   this.commentList = data.commentList;
-      // })
-      // .catch((e)=>{
-      //   alert(e);
-      // })
       axios({
         url:"http://localhost:8080/comment/getcommbyid",
         method:"GET",
@@ -260,26 +207,12 @@ export default {
           id: goodsId
         }
       }).then(result =>{
-        // console.log(result)
-        // this.commentList = result.data;
-        // console.log(this.commentList)
-        // console.log(this.commentList)
-        const commList = result.data
-        for (let i = 0; i < commList.length; i++) {
-          this.rating[i] = commList[i].rating
+        this.commList = result.data
+        console.log(this.commList)
+        for (let i = 0; i < this.commList.length; i++) {
+          this.rating[i] = this.commList[i].rating
         }
         console.log(this.rating)
-          console.log(item.index)
-          return `<el-rate v-model="rating[0]"
-                   disabled
-                   show-score
-                   text-color="#ff9900"
-                   score-template="${item.rating}">
-          </el-rate>
-          <p>${item.userid}</p><br/>
-          <p>${item.commentcontent}</p>`
-        }).join('')
-        // document.querySelector(".commentBody").innerHTML = commStr
       })
     },
 
@@ -297,6 +230,8 @@ export default {
   mounted() {
     this.getGoodsInfo(this.id);
     this.getGoodsMsg(this.id);
+  },
+  beforeMount() {
     this.getComment(this.id);
   },
 
