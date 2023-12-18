@@ -30,7 +30,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false;updatePwd">确 定</el-button>
+        <el-button type="primary" @click="updatePwd">确 定</el-button>
       </div>
     </el-dialog>
     <!--    <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>-->
@@ -120,7 +120,10 @@ export default {
     },
     updatePwd(done) {
       if (this.newPwd !== this.confirmPwd) {
-        alert('两次输入的密码不一致！');
+        this.$message({
+          message:'两次输入的密码不一致！',
+          type:"warning"
+        })
         return;
       }
       // const res = updatePwd({
@@ -144,23 +147,26 @@ export default {
         method:'POST',
         params:{
           id : localStorage.getItem('id'),
-          oldPwd: this.oldPwd,
-          confirmPwd: this.confirmPwd
+          oldPwd: this.form.oldPwd,
+          confirmPwd: this.form.confirmPwd
         }
       }).then(result =>{
+        console.log(result)
         this.dialogFormVisible = false
-        if (result){
+        this.form.confirmPwd = ''
+        this.form.oldPwd = ''
+        this.form.newPwd = ''
+        if (result.data.status === 200){
           this.$message({
-            message:'修改成功',
+            message:result.data.message,
             type:"success"
           })
         }else {
           this.$message({
-            message:'修改失败',
+            message:result.data.message,
             type:"warning"
           })
         }
-
       })
     }
   },

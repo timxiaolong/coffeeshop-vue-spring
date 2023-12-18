@@ -52,10 +52,10 @@ public class UserController {
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(User::getId,id);
         User user = userService.getById(id);
-        user.setPassword(confirmPwd);
         if (!user.getPassword().equals(oldPwd)){
             return new Message("原密码输入不正确",500,null);
         }
+        user.setPassword(confirmPwd);
         if (userService.update(user,lambdaQueryWrapper)){
             return new Message("修改成功！",200,true);
         }else {
