@@ -195,7 +195,11 @@ export default {
           status:0
         }
       }).then(result =>{
+        if (result){
 
+        }else {
+
+        }
       })
     },
 

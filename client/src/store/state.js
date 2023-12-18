@@ -5,8 +5,8 @@ const state = {
   adminName:getLocalItem('adminName')?getLocalItem('adminName'):'',
 
   //客户商城
-  clientName:getLocalItem('clientName')?getLocalItem('clientName'):'',
-  clientToken:getLocalItem('clientToken')?getLocalItem('clientToken'):null,
+  clientName:getLocalItem('username')?getLocalItem('username'):'',
+  clientToken:getLocalItem('id')?getLocalItem('id'):null,
 }
 
 export default state;

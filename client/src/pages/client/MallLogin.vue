@@ -70,9 +70,7 @@ export default {
         }).then(result =>{
           if (result.status === 200){
             this.$message("欢迎您，管理员")
-            // setTimeout("location.href=''",3000)
             this.$router.push('/');
-            // location.href = '../admin/Backstage.vue'
           }else {
             this.$message.error("用户名或密码错误")
           }
@@ -88,10 +86,11 @@ export default {
             password: password
           }
         }).then(result => {
-          if (result.status === 200){
-            localStorage.setItem('username',result.param.username)
-            localStorage.setItem('role',result.param.phone)
-            localStorage.setItem('id',result.param.id)
+          console.log(result)
+          if (result.data.status === 200){
+            localStorage.setItem('username',result.data.param.name)
+            localStorage.setItem('role',result.data.param.phone)
+            localStorage.setItem('id',result.data.param.id)
             this.$message("登录成功")
             setTimeout("location.href=\"#/mall/show/index\"",3000)
           }else {

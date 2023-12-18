@@ -19,6 +19,7 @@ import java.util.List;
  * @author wyj
  * @since 2023-12-12
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -44,6 +45,23 @@ public class UserController {
     public boolean Signin(@RequestBody User user){
         userService.save(user);
         return true;
+    }
+
+    @PostMapping("/changepwd")
+    public Message ChangePwd(@RequestParam Integer id,String oldPwd, String confirmPwd){
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(User::getId,id);
+        User user = userService.getById(id);
+        user.setPassword(confirmPwd);
+        if (!user.getPassword().equals(oldPwd)){
+            return new Message("原密码输入不正确",500,null);
+        }
+        if (userService.update(user,lambdaQueryWrapper)){
+            return new Message("修改成功！",200,true);
+        }else {
+            return new Message("修改失败！",500,false);
+        }
+
     }
 
 }

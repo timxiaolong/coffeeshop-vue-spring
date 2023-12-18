@@ -112,8 +112,10 @@ export default {
       this.$router.push(route)
     },
     logout(){
-      this.clientLogout();
+      // this.clientLogout();
+      localStorage.clear()
       this.$router.go(0);
+
     },
     backToTop(){
       backToTop();

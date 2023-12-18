@@ -2,142 +2,186 @@
   <div class="MyData">
     <ul>
       <li>
-        <span>用户头像</span>
-        <img :src="headimg" alt="headimg" />
-      </li>
-      <li>
-        <span>账号</span>
-        <p>{{email}}</p>
-      </li>
-      <li>
         <span>昵称</span>
-        <input type="text" v-model="nickname" />
-      </li>
-      <li>
-        <span>收件人</span>
-        <input type="text" v-model="recipient" />
-      </li>
-      <li>
-        <span>收件地址</span>
-        <input type="text" class="long" v-model="address" />
+        <input type="text" v-model="nickname"/>
       </li>
       <li>
         <span>联系电话</span>
-        <input type="text" v-model="phone" />
+        <input type="text" v-model="phone"/>
       </li>
       <li>
         <span>密码</span>
-        <button @click="showPopup">修改密码</button>
+        <button @click="dialogFormVisible = true">修改密码</button>
       </li>
     </ul>
     <button @click="updateUserData" class="saveBtn">保存</button>
-    <Popup title="修改密码" @popupClose="closePopup" v-show="popupShow">
-      <div class="popupContent" slot="popupContent">
-        <input type="password" v-model="oldPwd" placeholder="请输入原密码" />
-        <input type="password" v-model="newPwd" placeholder="请输入新密码" />
-        <input type="password" v-model="confirmPwd" placeholder="请再次输入新密码" />
-        <button @click="updatePwd">确认修改</button>
+
+    <el-dialog title="修改密码" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="原密码" :label-width="formLabelWidth">
+          <el-input v-model="form.oldPwd"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" :label-width="formLabelWidth">
+          <el-input v-model="form.newPwd"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" :label-width="formLabelWidth">
+          <el-input v-model="form.confirmPwd"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false;updatePwd">确 定</el-button>
       </div>
-    </Popup>
+    </el-dialog>
+    <!--    <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>-->
+
+    <!--    <Popup title="修改密码" @popupClose="closePopup" v-show="popupShow">-->
+    <!--      <div class="popupContent" slot="popupContent">-->
+    <!--        <input type="password" v-model="oldPwd" placeholder="请输入原密码" />-->
+    <!--        <input type="password" v-model="newPwd" placeholder="请输入新密码" />-->
+    <!--        <input type="password" v-model="confirmPwd" placeholder="请再次输入新密码" />-->
+    <!--        <el-input type="password" v-model="oldPwd" placeholder="请输入原密码"></el-input>-->
+    <!--        <el-input type="password" v-model="newPwd" placeholder="请输入新密码"></el-input>-->
+    <!--        <el-input type="password" v-model="confirmPwd" placeholder="请再输入一次密码"></el-input>-->
+    <!--        <button @click="updatePwd">确认修改</button>-->
+    <!--      </div>-->
+    <!--    </Popup>-->
   </div>
 </template>
 
 <script>
-import { mapState,mapMutations } from 'vuex';
-import {getUserData,updateUserData,updatePwd} from '../../api/client';
+import {mapState, mapMutations} from 'vuex';
+import {getUserData, updateUserData, updatePwd} from '../../api/client';
 import Popup from '../../components/Popup';
+import axios from "axios";
 
 export default {
   name: 'MyData',
-  components:{
+  components: {
     Popup
   },
-  computed:{
+  computed: {
     ...mapState([
       'clientToken'
     ]),
   },
-  data () {
+  data() {
     return {
-      id:'',
-      headimg:'',
-      email:'',
-      nickname:'',
-      recipient:'',
-      address:'',
-      phone:'',
-      popupShow:false,
-      oldPwd:'',
-      newPwd:'',
-      confirmPwd:''
+      id: '',
+      headimg: '',
+      email: '',
+      nickname: '',
+      recipient: '',
+      address: '',
+      phone: '',
+      popupShow: false,
+      oldPwd: '',
+      newPwd: '',
+      confirmPwd: '',
+
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {
+        oldPwd:'',
+        newPwd:'',
+        confirmPwd:''
+      },
+      formLabelWidth: '120px'
     }
   },
 
-  methods:{
+  methods: {
     ...mapMutations({
       setClientName: 'SET_CLIENT_NAME',
     }),
-    updateUserData(){
+    updateUserData() {
       const res = updateUserData({
-        id:this.id,
-        nickname:this.nickname,
-        recipient:this.recipient,
-        address:this.address,
-        phone:this.phone,
+        id: this.id,
+        nickname: this.nickname,
+        recipient: this.recipient,
+        address: this.address,
+        phone: this.phone,
       });
       res
-      .then(()=>{
-        alert('修改成功!');
-        this.setClientName(this.nickname);
-      })
-      .catch((e)=>{
-        alert(e);
-      })
+        .then(() => {
+          alert('修改成功!');
+          this.setClientName(this.nickname);
+        })
+        .catch((e) => {
+          alert(e);
+        })
     },
-    closePopup(){
+    closePopup() {
       this.popupShow = false;
     },
-    showPopup(){
+    showPopup() {
       this.popupShow = true;
+
     },
-    updatePwd(){
-      if(this.newPwd!==this.confirmPwd){
+    updatePwd(done) {
+      if (this.newPwd !== this.confirmPwd) {
         alert('两次输入的密码不一致！');
         return;
       }
-      const res = updatePwd({
-        id:this.id,
-        oldPwd:this.oldPwd,
-        newPwd:this.newPwd,
-        confirmPwd:this.confirmPwd
-      });
-      res.then(()=>{
-        this.oldPwd = '';
-        this.newPwd = '';
-        this.confirmPwd = '';
-        this.closePopup();
-        alert('修改密码成功!');
-      })
-      .catch((e)=>{
-        alert(e);
+      // const res = updatePwd({
+      //   id: this.id,
+      //   oldPwd: this.oldPwd,
+      //   newPwd: this.newPwd,
+      //   confirmPwd: this.confirmPwd
+      // });
+      // res.then(() => {
+      //   this.oldPwd = '';
+      //   this.newPwd = '';
+      //   this.confirmPwd = '';
+      //   this.closePopup();
+      //   alert('修改密码成功!');
+      // })
+      //   .catch((e) => {
+      //     alert(e);
+      //   })
+      axios({
+        url:'http://localhost:8080/user/changepwd',
+        method:'POST',
+        params:{
+          id : localStorage.getItem('id'),
+          oldPwd: this.oldPwd,
+          confirmPwd: this.confirmPwd
+        }
+      }).then(result =>{
+        this.dialogFormVisible = false
+        if (result){
+          this.$message({
+            message:'修改成功',
+            type:"success"
+          })
+        }else {
+          this.$message({
+            message:'修改失败',
+            type:"warning"
+          })
+        }
+
       })
     }
   },
 
-  mounted(){
-    const res = getUserData(this.clientToken);
-    res
-    .then((data)=>{
-      this.id = data.id;
-      this.headimg = data.headimg;
-      this.email = data.email;
-      this.nickname = data.nickname;
-      this.recipient = data.recipient;
-      this.address = data.address;
-      this.phone = data.phone;    
-    })
-    .catch((e)=>{
-      alert(e)
+  mounted() {
+    // const res = getUserData(this.clientToken);
+    // res
+    // .then((data)=>{
+    //   this.id = data.id;
+    //   this.headimg = data.headimg;
+    //   this.email = data.email;
+    //   this.nickname = data.nickname;
+    //   this.recipient = data.recipient;
+    //   this.address = data.address;
+    //   this.phone = data.phone;
+    // })
+    // .catch((e)=>{
+    //   alert(e)
+    // })
+    axios({
+      url: ''
     })
   }
 }
@@ -145,52 +189,63 @@ export default {
 
 <style scoped lang="less">
 @import "../../assets/css/var.less";
-.MyData{
-  ul{
+
+.MyData {
+  ul {
     width: 100%;
     overflow: hidden;
-    li{
+
+    li {
       margin-bottom: 30px;
-      &:first-child{
-        height:60px;
+
+      &:first-child {
+        height: 60px;
         line-height: 60px;
-        span{
+
+        span {
           position: relative;
           bottom: 18px;
         }
       }
-      span{
+
+      span {
         display: inline-block;
         width: 100px;
         height: 20px;
       }
-      img{
+
+      img {
         display: inline-block;
         width: 60px;
         height: 60px;
         border-radius: 50%;
       }
-      p{
+
+      p {
         display: inline-block;
       }
-      input{
+
+      input {
         width: 280px;
         border: none;
         text-align: center;
         border-bottom: 2px solid @thirdColor;
       }
-      .long{
+
+      .long {
       }
-      button{
+
+      button {
         background-color: white;
         border: 1px solid @thirdColor;
-        color:@thirdColor;
+        color: @thirdColor;
         width: 80px;
         height: 30px;
       }
     }
   }
-  .saveBtn{
+
+  .saveBtn {
     background-color: @thirdColor;
     border: none;
     color: white;
@@ -199,9 +254,11 @@ export default {
     display: block;
     margin: 10px auto;
   }
-  .popupContent{
+
+  .popupContent {
     padding: 20px;
-    input{
+
+    input {
       display: block;
       border: none;
       border-bottom: 1px solid #313541;
@@ -210,7 +267,8 @@ export default {
       padding: 5px;
       width: 200px;
     }
-    button{
+
+    button {
       background-color: #333333;
       border: none;
       color: white;
