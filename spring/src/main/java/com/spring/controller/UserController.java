@@ -61,7 +61,25 @@ public class UserController {
         }else {
             return new Message("修改失败！",500,false);
         }
+    }
 
+    @PostMapping("/changeinfo")
+    public Message changeInfo(@RequestBody User user){
+        User dbUser = userService.getById(user.getId());
+        dbUser.setName(user.getName());
+        dbUser.setPhone(user.getPhone());
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(User::getId,user.getId());
+        if (userService.update(dbUser,lambdaQueryWrapper)){
+            return new Message("修改成功！",200,true);
+        }else {
+            return new Message("修改失败",500,false);
+        }
+    }
+
+    @GetMapping("/getuserinfobyid")
+    public User getUserInfoById(@RequestParam Integer id){
+        return userService.getById(id);
     }
 
 }

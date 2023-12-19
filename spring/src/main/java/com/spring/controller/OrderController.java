@@ -1,11 +1,14 @@
 package com.spring.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.spring.entity.Orders;
 import com.spring.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -28,6 +31,15 @@ public class OrderController {
         System.out.println(order);
         ordersService.saveOrUpdate(order);
         return true;
+    }
+
+    @GetMapping("findorderbystatus")
+    public List<Orders> findOrderByStatus(@RequestParam Integer id,Integer status){
+        LambdaQueryWrapper<Orders> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Orders::getOrderuserid,id);
+        lambdaQueryWrapper.eq(Orders::getStatus,status);
+        List<Orders> dbOrder = ordersService.list(lambdaQueryWrapper);
+        return dbOrder;
     }
 
 }

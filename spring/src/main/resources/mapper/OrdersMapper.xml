@@ -8,6 +8,8 @@
         <result column="ordertime" property="ordertime" />
         <result column="orderusername" property="orderusername" />
         <result column="orderuserid" property="orderuserid" />
+        <result column="orderitemname" property="orderitemname" />
+        <result column="num" property="num" />
         <result column="pretime" property="pretime" />
         <result column="price" property="price" />
         <result column="status" property="status" />
@@ -15,7 +17,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, ordertime, orderusername, orderuserid, pretime, price, status
+        id, ordertime, orderusername, orderuserid, orderitemname, pretime, price, status
     </sql>
 
 </mapper>

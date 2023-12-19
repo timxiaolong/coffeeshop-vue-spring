@@ -38,6 +38,12 @@ public class Orders implements Serializable {
     @ApiModelProperty(value = "下单用户id")
     private Integer orderuserid;
 
+    @ApiModelProperty(value = "下单商品")
+    private String orderitemname;
+
+    @ApiModelProperty(value = "数量")
+    private Integer num;
+
     @ApiModelProperty(value = "预计出餐时间")
     private LocalDateTime pretime;
 

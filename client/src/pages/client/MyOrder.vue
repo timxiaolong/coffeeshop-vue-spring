@@ -16,18 +16,18 @@
       <ul class="orderList">
         <li v-for="(item,index) in orderList" :key="'order'+item.id">
           <div class="orderHeader">
-            <span class="orderTime">{{item.createtime}}</span>
+            <span class="orderTime">{{item.ordertime}}</span>
             <span class="orderId">{{'订单号：'+item.id}}</span>
             <span class="state">{{tagList[item.state+1]}}</span>
             <span class="deleteBtn" @click="deleteOrder(item.id)"><i class="iconfont icon-close" /></span>
           </div>
           <div class="orderDetail">
-            <img :src="item.goods.img" alt="商品图片" />
+<!--            <img :src="item.goods.img" alt="商品图片" />-->
             <div class="goodsName">
-              <p @click="navTo('/mall/goods/'+item.goods.id)">{{item.goods.name}}</p>
-              <span>{{item.goods.spec}}</span>
+              <p @click="navTo('/mall/goods/'+item.goods.id)">{{item.goods.orderitemname}}</p>
+<!--              <span>{{item.goods.spec}}</span>-->
             </div>
-            <span class="unitPrice">{{'￥'+item.goods.unitPrice}}</span>
+            <span class="unitPrice">{{'￥'+item.goods.price}}</span>
             <span class="num">{{item.goodsNum}}</span>
             <span class="amount">{{'￥'+item.amount}}</span>
             <button v-if="item.state===0" @click="confirmPay(item.id)">确认付款</button>
@@ -42,8 +42,8 @@
       <div class="popupContent" slot="popupContent">
         <div class="scoreBox">
           <span class="tips">评分：</span>
-          <i 
-            class="iconfont icon-collection_fill" 
+          <i
+            class="iconfont icon-collection_fill"
             v-for="(item,index) in 5"
             :key="'star'+index"
             :style="{color:(index+1)<=curStar?'#f9bd4f':'white'}"
@@ -63,6 +63,7 @@
 import { mapState } from 'vuex';
 import {getOrderByState,deleteOrder,confirmReceive,pay,sendComment} from '../../api/client';
 import Popup from '../../components/Popup';
+import axios from "axios";
 
 export default {
   name: 'MyOrder',
@@ -76,7 +77,7 @@ export default {
   },
   data () {
     return {
-      tagList:['全部订单','待付款','待发货','已发货','已完成'],
+      tagList:['全部订单','待付款','待制作','制作完成，等待取餐','已完成'],
       curIndex:0,
       orderList:[],
       popupShow:false,
@@ -98,14 +99,27 @@ export default {
       this.$router.push(route);
     },
     getOrderByState(state){
-      const res = getOrderByState(state,this.clientToken);
-      res
-      .then((data)=>{
-        this.orderList=data
-      })
-      .catch((e)=>{
-        alert(e);
-      })
+      // const res = getOrderByState(state,this.clientToken);
+      // res
+      // .then((data)=>{
+      //   this.orderList=data
+      // })
+      // .catch((e)=>{
+      //   alert(e);
+      // })
+      console.log(state)
+    axios({
+      url:'http://localhost:8080/order/findorderbystatus',
+      method:'GET',
+      params:{
+        id:localStorage.getItem('id'),
+        status:state
+      }
+    }).then(result =>{
+      console.log(result)
+      this.orderList = result.data
+      console.log(this.orderList)
+    })
     },
     deleteOrder(orderId){
       const res = deleteOrder(orderId);

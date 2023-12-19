@@ -95,21 +95,42 @@ export default {
       setClientName: 'SET_CLIENT_NAME',
     }),
     updateUserData() {
-      const res = updateUserData({
-        id: this.id,
-        nickname: this.nickname,
-        recipient: this.recipient,
-        address: this.address,
-        phone: this.phone,
-      });
-      res
-        .then(() => {
-          alert('修改成功!');
-          this.setClientName(this.nickname);
-        })
-        .catch((e) => {
-          alert(e);
-        })
+      // const res = updateUserData({
+      //   id: this.id,
+      //   nickname: this.nickname,
+      //   recipient: this.recipient,
+      //   address: this.address,
+      //   phone: this.phone,
+      // });
+      // res
+      //   .then(() => {
+      //     alert('修改成功!');
+      //     this.setClientName(this.nickname);
+      //   })
+      //   .catch((e) => {
+      //     alert(e);
+      //   })
+      axios({
+        url:'http://localhost:8080/user/changeinfo',
+        method:'POST',
+        data:{
+          id:localStorage.getItem('id'),
+          name:this.nickname,
+          phone:this.phone
+        }
+      }).then(result =>{
+        if (result.data.param){
+          this.$message({
+            message:result.data.message,
+            type:"success"
+          })
+        }else {
+          this.$message({
+            message:result.data.message,
+            type:"warning"
+          })
+        }
+      })
     },
     closePopup() {
       this.popupShow = false;
@@ -126,22 +147,6 @@ export default {
         })
         return;
       }
-      // const res = updatePwd({
-      //   id: this.id,
-      //   oldPwd: this.oldPwd,
-      //   newPwd: this.newPwd,
-      //   confirmPwd: this.confirmPwd
-      // });
-      // res.then(() => {
-      //   this.oldPwd = '';
-      //   this.newPwd = '';
-      //   this.confirmPwd = '';
-      //   this.closePopup();
-      //   alert('修改密码成功!');
-      // })
-      //   .catch((e) => {
-      //     alert(e);
-      //   })
       axios({
         url:'http://localhost:8080/user/changepwd',
         method:'POST',
@@ -172,22 +177,15 @@ export default {
   },
 
   mounted() {
-    // const res = getUserData(this.clientToken);
-    // res
-    // .then((data)=>{
-    //   this.id = data.id;
-    //   this.headimg = data.headimg;
-    //   this.email = data.email;
-    //   this.nickname = data.nickname;
-    //   this.recipient = data.recipient;
-    //   this.address = data.address;
-    //   this.phone = data.phone;
-    // })
-    // .catch((e)=>{
-    //   alert(e)
-    // })
     axios({
-      url: ''
+      url: 'http://localhost:8080/user/getuserinfobyid',
+      method:'GET',
+      params:{
+        id:localStorage.getItem('id')
+      }
+    }).then(result =>{
+        this.nickname = result.data.name;
+        this.phone = result.data.phone;
     })
   }
 }
