@@ -137,7 +137,6 @@ export default {
     },
     showPopup() {
       this.popupShow = true;
-
     },
     updatePwd(done) {
       if (this.newPwd !== this.confirmPwd) {

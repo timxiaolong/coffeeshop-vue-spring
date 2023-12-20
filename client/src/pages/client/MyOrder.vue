@@ -18,22 +18,31 @@
           <div class="orderHeader">
             <span class="orderTime">{{item.ordertime}}</span>
             <span class="orderId">{{'订单号：'+item.id}}</span>
-            <span class="state">{{tagList[item.state+1]}}</span>
+            <span class="state">{{tagList[item.status+1]}}</span>
             <span class="deleteBtn" @click="deleteOrder(item.id)"><i class="iconfont icon-close" /></span>
           </div>
           <div class="orderDetail">
-<!--            <img :src="item.goods.img" alt="商品图片" />-->
             <div class="goodsName">
-              <p @click="navTo('/mall/goods/'+item.goods.id)">{{item.goods.orderitemname}}</p>
-<!--              <span>{{item.goods.spec}}</span>-->
+              <p >{{item.orderitemname}}</p>
             </div>
-            <span class="unitPrice">{{'￥'+item.goods.price}}</span>
-            <span class="num">{{item.goodsNum}}</span>
-            <span class="amount">{{'￥'+item.amount}}</span>
-            <button v-if="item.state===0" @click="confirmPay(item.id)">确认付款</button>
-            <button v-else-if="item.state===2" @click="confirmReceive(item.id)">确认收货</button>
-            <button v-else-if="item.state===3 && !item.hasComment" @click="showPopup(item.id,item.goods.id,item.goods.goodsDetailId)">评价</button>
-            <span class="hasComment" v-else-if="item.state===3 && item.hasComment">已评价</span>
+            <span class="unitPrice">{{'￥'+item.price}}</span>
+            <span class="num">{{item.num}}</span>
+<!--            <span class="amount">{{'￥'+item.amount}}</span>-->
+              <button v-if="item.status===0" @click="confirmPay(item.id);centerDialogVisible = true">确认付款</button>
+              <button v-else-if="item.status===2" @click="confirmReceive(item.id)">确认收货</button>
+              <el-dialog
+                title="提示"
+                :visible.sync="centerDialogVisible"
+                width="30%"
+                center>
+                <img src="../../assets/img/banner1.jpg">
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialogVisible = false">取 消</el-button>
+                <el-button @click="centerDialogVisible = false">我已付款</el-button>
+              </span>
+              </el-dialog>
+<!--            <button v-else-if="item.status===3 && !item.hasComment" @click="showPopup(item.id,item.goods.id,item.goods.goodsDetailId)">评价</button>-->
+<!--            <span class="hasComment" v-else-if="item.status===3 && item.hasComment">已评价</span>-->
           </div>
         </li>
       </ul>
@@ -57,6 +66,8 @@
       </div>
     </Popup>
   </div>
+
+
 </template>
 
 <script>
@@ -87,6 +98,7 @@ export default {
       curStar:0,
       hasClickStar:false,
       comment:'',
+      centerDialogVisible: false
     }
   },
 
