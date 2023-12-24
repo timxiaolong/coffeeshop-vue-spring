@@ -91,7 +91,7 @@
             <p class="small"></p>
           </div>
         </ZoomImg>
-        <ZoomImg imgSrc="http://yanxuan.nosdn.127.net/7cd0c8ed77da498090fb67c288ef05be.jpg" class="center">
+        <ZoomImg imgSrc="https://wx4.sinaimg.cn/mw690/a2783d2fly1hl0420g8xsj20zk0zkafc.jpg" class="center">
           <div class="makerInfo" slot="otherEle">
             <p class="large">咖啡烘焙工艺解析</p>
             <hr/>
@@ -99,14 +99,14 @@
           </div>
         </ZoomImg>
         <div class="right">
-          <ZoomImg imgSrc="http://yanxuan.nosdn.127.net/d824afe357e61fbee097412c5894c6ce.jpg">
+          <ZoomImg imgSrc="https://cdn.pixabay.com/photo/2017/04/19/13/03/coffee-2242213_640.jpg">
             <div class="makerInfo" slot="otherEle">
               <p class="large">冲泡艺术与技巧</p>
               <hr/>
               <p class="small"></p>
             </div>
           </ZoomImg>
-          <ZoomImg imgSrc="http://yanxuan.nosdn.127.net/cf5f4a0d110ca17b9e0a80e6f7e6184b.jpg">
+          <ZoomImg imgSrc="https://cdn.pixabay.com/photo/2017/10/13/15/29/coffee-2847957_1280.jpg">
             <div class="makerInfo" slot="otherEle">
               <p class="large">咖啡与时尚</p>
               <hr/>
@@ -187,13 +187,6 @@ export default {
       this.navTo('/mall/show/goodsList/'+typeId+'/all');
     },
     getGoodsList(){
-      // const res = getGoodsList();
-      // res.then((data)=>{
-      //   this.goodsList = data;
-      // })
-      // .catch((e)=>{
-      //   alert(e);
-      // })
       axios({
         url:'http://localhost:8080/menu/getmenu',
         method:'GET'

@@ -35,7 +35,7 @@
             text-color="#ff9900"
             :score-template="item.rating"
           ></el-rate>
-          <p>{{ item.userid }}</p><br/>
+          <p>匿名用户</p><br/>
           <p>{{ item.commentcontent }}</p>
         </div>
       </section>
@@ -123,9 +123,7 @@ export default {
         this.goodsName = data.data.name;
         this.goodsDesc = data.data.describtion;
         this.goodsPrice = data.data.price;
-        // this.specs = data.specs;
         this.typeId = data.data.typeId;
-        // this.temSpecId = data.specs[0].id;
          this.getTypeGoodsList(data.typeId);
       }).catch(e => {
         console.dir(e)

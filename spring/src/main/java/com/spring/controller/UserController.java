@@ -82,4 +82,8 @@ public class UserController {
         return userService.getById(id);
     }
 
+    @GetMapping("/getalluser")
+    public List<User> getAllUser(){
+        return userService.list();
+    }
 }

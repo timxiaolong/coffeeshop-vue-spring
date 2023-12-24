@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author wyj
@@ -27,19 +27,32 @@ public class OrderController {
     private OrdersService ordersService;
 
     @PostMapping("/sendorder")
-    public boolean Buy(@RequestBody Orders order){
+    public boolean Buy(@RequestBody Orders order) {
         System.out.println(order);
         ordersService.saveOrUpdate(order);
         return true;
     }
 
-    @GetMapping("findorderbystatus")
-    public List<Orders> findOrderByStatus(@RequestParam Integer id,Integer status){
+    @GetMapping("/findorderbystatus")
+    public List<Orders> findOrderByStatus(@RequestParam Integer id, Integer status) {
         LambdaQueryWrapper<Orders> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(Orders::getOrderuserid,id);
-        lambdaQueryWrapper.eq(Orders::getStatus,status);
+        lambdaQueryWrapper.eq(Orders::getOrderuserid, id);
+        if (status != -1) {
+            lambdaQueryWrapper.eq(Orders::getStatus, status);
+        }
         List<Orders> dbOrder = ordersService.list(lambdaQueryWrapper);
         return dbOrder;
     }
 
+    @GetMapping("/getallorder")
+    public List<Orders> getAllOrder(){
+        return ordersService.list();
+    }
+
+    @GetMapping("/findorderbyid")
+    public Orders findOrderById(@RequestParam Integer id) {
+//        LambdaQueryWrapper<Orders> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+//        lambdaQueryWrapper.eq(Orders::getId, id);
+        return ordersService.getById(id);
+    }
 }

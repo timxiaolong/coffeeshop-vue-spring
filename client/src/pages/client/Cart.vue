@@ -11,18 +11,17 @@
       <ul class="orderList">
         <li v-for="(item,index) in orderList" :key="'order'+item.id">
           <div class="orderDetail">
-            <img :src="item.goods.img" alt="商品图片" />
-            <div class="goodsName">
-              <p @click="navTo('/mall/goods/'+item.goods.id)">{{item.goods.name}}</p>
-              <span>{{item.goods.spec}}</span>
+            <img src="https://pic1.zhimg.com/80/v2-f206ad69d46466554afb9c69a4dbaaa0_720w.webp" alt="商品图片" />
+            <div class="goodsName" style="text-align: center">
+              <p @click="navTo('/mall/goods/'+item.goods.id)">{{item.itemname}}</p>
             </div>
-            <span class="unitPrice">{{'￥'+item.goods.unitPrice}}</span>
+            <span class="unitPrice">{{'￥'+item.price}}</span>
             <span class="num">
-              <NumberInput 
-                @changeHandle="numberChange(item.id)" 
-                :initNum="item.temGoodsNum" 
-                v-model="item.temGoodsNum" 
-                :min="1" 
+              <NumberInput
+                @changeHandle="numberChange(item.id)"
+                :initNum="item.temGoodsNum"
+                v-model="item.temGoodsNum"
+                :min="1"
                 :max="999"
               />
             </span>
@@ -46,6 +45,7 @@
 import { mapState } from 'vuex';
 import {getOrderByState,deleteOrder,settleAccounts} from '../../api/client';
 import NumberInput from '../../components/NumberInput';
+import axios from "axios";
 
 export default {
   name: 'Cart',
@@ -71,17 +71,17 @@ export default {
   },
 
   methods:{
-    getOrderByState(state){
-      const res = getOrderByState(state,this.clientToken);
-      res
-      .then((data)=>{
-        this.orderList=data;
-        this.orderList.map((item,index)=>{
-          item.temGoodsNum = item.goodsNum;
-        })
-      })
-      .catch((e)=>{
-        alert(e);
+    getCarft(){
+      console.log(localStorage.getItem('id'))
+      axios({
+        url:'http://localhost:8080/shoppingcarft/getcarft',
+        method:'GET',
+        params:{
+          userid: Number(localStorage.getItem('id'))
+        }
+      }).then(result =>{
+        this.orderList = result.data
+        console.log(this.orderList)
       })
     },
     numberChange(orderId){
@@ -134,7 +134,8 @@ export default {
   },
 
   mounted(){
-    this.getOrderByState(0);
+    // this.getOrderByState(0);
+    this.getCarft();
   },
 }
 </script>

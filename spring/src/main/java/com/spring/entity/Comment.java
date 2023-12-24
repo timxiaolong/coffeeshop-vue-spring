@@ -31,6 +31,9 @@ public class Comment implements Serializable {
     @ApiModelProperty(value = "商品id")
     private Integer itemid;
 
+    @ApiModelProperty(value = "商品名称")
+    private String itemname;
+
     @ApiModelProperty(value = "评分")
     private String rating;
 

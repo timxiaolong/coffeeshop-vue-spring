@@ -83,11 +83,12 @@ let router = new Router({
           ]
         }
       ]
-    },{
-  	  path:'*',
-  	  name:'ErrorPage',
-  	  component: ErrorPage
-    }
+    },
+    // {
+  	//   path:'*',
+  	//   name:'ErrorPage',
+  	//   component: ErrorPage
+    // }
   ],
   scrollBehavior (to, from, savedPosition) {
     if (savedPosition) {
@@ -98,20 +99,20 @@ let router = new Router({
   }
 });
 
-//登录拦截
-router.beforeEach((to,from,next) => {
-  if(to.meta.requireLogin){
-    if(store.state.clientToken){
-      next()
-    }else{
-      next({
-        path: '/login',
-        query:{redirect: to.fullPath}
-      })
-    }
-  }else{
-    next();
-  }
-});
+// 登录拦截
+// router.beforeEach((to,from,next) => {
+//   if(to.meta.requireLogin){
+//     if(store.state.clientToken){
+//       next()
+//     }else{
+//       next({
+//         path: '/login',
+//         query:{redirect: to.fullPath}
+//       })
+//     }
+//   }else{
+//     next();
+//   }
+// });
 
 export default router;

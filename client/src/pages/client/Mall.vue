@@ -12,7 +12,7 @@
         <div class="right" v-else>
           <span @click="navTo('/login')">登录</span>
           <span @click="navTo('/login')">注册</span>
-          <span @click="navTo('/backstage')">我是管理员</span>
+          <span @click="navTo('/backstage/editUser')">我是管理员</span>
         </div>
       </div>
     </header>

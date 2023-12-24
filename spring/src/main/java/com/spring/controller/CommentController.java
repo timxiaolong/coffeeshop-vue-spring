@@ -31,4 +31,9 @@ public class CommentController {
         return commentService.list(lambdaQueryWrapper);
     }
 
+    @GetMapping("/getallcomm")
+    public List<Comment> getAllComm(){
+        return commentService.list();
+    }
+
 }

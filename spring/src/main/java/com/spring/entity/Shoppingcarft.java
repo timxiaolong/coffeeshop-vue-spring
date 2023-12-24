@@ -22,8 +22,11 @@ public class Shoppingcarft implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户名")
-    private String username;
+    @ApiModelProperty(value = "id")
+    private Integer id;
+
+    @ApiModelProperty(value = "用户id")
+    private String userid;
 
     @ApiModelProperty(value = "商品名")
     private String itemname;
@@ -33,6 +36,9 @@ public class Shoppingcarft implements Serializable {
 
     @ApiModelProperty(value = "数量")
     private Integer num;
+
+    @ApiModelProperty(value = "总价")
+    private Integer amount;
 
 
 }

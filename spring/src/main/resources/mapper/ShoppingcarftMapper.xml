@@ -4,15 +4,17 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.spring.entity.Shoppingcarft">
-        <result column="username" property="username" />
+        <result column="id" property="id" />
+        <result column="userid" property="userid" />
         <result column="itemname" property="itemname" />
         <result column="price" property="price" />
         <result column="num" property="num" />
+        <result column="amount" property="amount" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        username, itemname, price, num
+        id, userid, itemname, price, num, amount
     </sql>
 
 </mapper>

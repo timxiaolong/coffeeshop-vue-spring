@@ -55,6 +55,7 @@ import Popup from '../../components/Popup';
 import TextInput from '../../components/TextInput';
 import Radio from '../../components/Radio';
 import {getTypes,getGoodsInfo,addGoods,addSpec,deleteSpec,updateGoods} from '../../api/admin';
+import axios from "axios";
 export default {
   name: 'EditGoods',
   components:{

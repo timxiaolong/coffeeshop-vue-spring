@@ -16,12 +16,12 @@
         <span>总金额：</span>
         <span class="val">{{'¥'+amount}}</span>
       </div>
-      <div class="inputBox">
-        <span>规格：</span>
-        <Radio v-for="(item,index) in spec" :key="item.id" v-model="temSpecId" :initVal="temSpecId" radioName="spec" :radioVal="item.id">
-          <span class="tips" slot="tips">{{item.specName}}</span>
-        </Radio>
-      </div>
+<!--      <div class="inputBox">-->
+<!--        <span>规格：</span>-->
+<!--        <Radio v-for="(item,index) in spec" :key="item.id" v-model="temSpecId" :initVal="temSpecId" radioName="spec" :radioVal="item.id">-->
+<!--          <span class="tips" slot="tips">{{item.specName}}</span>-->
+<!--        </Radio>-->
+<!--      </div>-->
       <div class="inputBox">
         <span>数量：</span>
         <NumberInput v-model="temNum" :initNum="temNum" :min="1" :max="999"/>
@@ -29,7 +29,7 @@
       <div class="inputBox">
         <span>订单状态：</span>
         <Radio v-for="(item,index) in states" :key="item.id" v-model="temStateId" :initVal="temStateId" radioName="state" :radioVal="item.id">
-          <span class="tips" slot="tips">{{item.name}}</span>
+          <span class="tips" slot="tips">{{item}}</span>
         </Radio>
       </div>
       <div class="btnBox">
@@ -44,6 +44,7 @@
 import {getAOrder,changeOrder} from '../../api/admin';
 import Radio from '../../components/Radio';
 import NumberInput from '../../components/NumberInput';
+import axios from "axios";
 
 export default {
   name: 'EditOrders',
@@ -52,45 +53,59 @@ export default {
     NumberInput
   },
   computed:{
-    amount(){
-      let price = 0;
-      this.spec.map((item,index)=>{
-        if(item.id===this.temSpecId){
-          price = item.unitPrice;
-        }
-      })
-      return this.temNum*price;
-    }
+    // amount(){
+    //   let price = 0;
+    //   this.spec.map((item,index)=>{
+    //     if(item.id===this.temSpecId){
+    //       price = item.unitPrice;
+    //     }
+    //   })
+    //   return this.temNum*price;
+    // }
   },
   data(){
     return{
       id:this.$route.params.id,
       goods:'',
-      spec:[],
-      states:[],
+      // spec:[],
+      states:['待付款','已付款，等待制作','制作完成，等待取餐'],
       curSpecId:'',
       curStateId:'',
       temSpecId:'',
       temNum:0,
-      temState:''
+      temState:'',
+      amount:''
     }
   },
   methods:{
     fetchOrderDetail(id){
-      const res = getAOrder(id);
-      res
-      .then((order)=>{
-        this.goods = order.goods;
-        this.spec = order.spec;
-        this.states = order.states;
-        this.curSpecId = order.curSpec.id;
-        this.curStateId = order.curState.id;
-        this.temSpecId = order.curSpec.id;
-        this.temNum = Number(order.num);
-        this.temStateId = order.curState.id;
-      })
-      .catch((e)=>{
-        alert(e);
+      // const res = getAOrder(id);
+      // res
+      // .then((order)=>{
+      //   this.goods = order.goods;
+      //   this.spec = order.spec;
+      //   this.states = order.states;
+      //   this.curSpecId = order.curSpec.id;
+      //   this.curStateId = order.curState.id;
+      //   this.temSpecId = order.curSpec.id;
+      //   this.temNum = Number(order.num);
+      //   this.temStateId = order.curState.id;
+      // })
+      // .catch((e)=>{
+      //   alert(e);
+      // })
+      axios({
+        url:'http://localhost:8080/order/findorderbyid',
+        method:'GET',
+        params:{
+          id : id
+        }
+      }).then(result =>{
+        console.log(result)
+        this.id = result.data.id
+        this.goods = result.data.orderitemname
+        this.amount = result.data.price
+        this.temNum = result.data.num
       })
     },
 

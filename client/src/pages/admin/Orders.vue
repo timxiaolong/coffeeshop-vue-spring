@@ -7,21 +7,19 @@
   	<div class="content">
   		<table class="ordersTable">
 	        <thead>
-	        	<tr><th>订单号</th><th>用户昵称</th><th>收件人</th><th>收货地址</th><th>联系电话</th><th>商品</th><th>规格</th><th>购买数量</th><th>金额</th><th>订单状态</th><th>更新时间</th><th>操作</th></tr>
+	        	<tr><th>订单号</th><th>用户昵称</th><th>用户id</th><th>商品</th><th>下单时间</th><th>购买数量</th><th>预定最晚出餐</th><th>价格</th><th>订单状态</th><th>操作</th></tr>
 	        </thead>
 	        <tbody>
 	            <tr v-for="(item,index) in orderList" :key="'order'+item.id">
 	            	<td>{{item.id}}</td>
-	            	<td>{{item.user.nickname}}</td>
-	            	<td>{{item.user.name}}</td>
-	            	<td>{{item.user.address}}</td>
-	            	<td>{{item.user.phone}}</td>
-	            	<td>{{item.goods}}</td>
-	            	<td>{{item.spec}}</td>
+	            	<td>{{item.orderusername}}</td>
+	            	<td>{{item.orderuserid}}</td>
+	            	<td>{{item.orderitemname}}</td>
+	            	<td>{{item.ordertime}}</td>
 	            	<td>{{item.num}}</td>
-	            	<td>{{item.amount}}</td>
-	            	<td>{{item.state}}</td>
-	            	<td>{{item.time}}</td>
+	            	<td>{{item.pretime}}</td>
+	            	<td>{{item.price}}</td>
+	            	<td>{{item.status}}</td>
 	                <td><button class="normal" @click="editOrder(item.id)">编辑</button><button class="delete" @click="deleteOrder(item.id)">删除</button></td>
 	            </tr>
 	        </tbody>
@@ -33,6 +31,7 @@
 <script>
 import {getOrders,deleteOrder} from '../../api/admin';
 import Tag from '../../components/Tag';
+import axios from "axios";
 export default {
   name: 'Orders',
   components:{
@@ -48,14 +47,20 @@ export default {
   },
   methods:{
   	changeTag(index){
-  		const res = getOrders(index-1);
-  		res
-  		.then((orders)=>{
-  			this.orderList = orders;
-  		})
-  		.catch((e)=>{
-  			alert(e);
-  		})
+  		// const res = getOrders(index-1);
+  		// res
+  		// .then((orders)=>{
+  		// 	this.orderList = orders;
+  		// })
+  		// .catch((e)=>{
+  		// 	alert(e);
+  		// })
+      axios({
+        url:'http://localhost:8080/order/getallorder',
+        method:'GET'
+      }).then(result =>{
+        this.orderList = result.data
+      })
   	},
   	editOrder(id){
   		this.$router.push('/backstage/orders/'+id)

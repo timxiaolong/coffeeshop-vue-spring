@@ -3,7 +3,10 @@ package com.spring.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.spring.entity.Admin;
+import com.spring.entity.Menu;
+import com.spring.entity.User;
 import com.spring.service.AdminService;
+import com.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +28,7 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+
     @GetMapping("/login")
     public Admin Login(@RequestParam("username") String username,@RequestParam("password") String password){
         LambdaQueryWrapper<Admin> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -37,4 +41,7 @@ public class AdminController {
             return dbAdmin.get(0);
         }
     }
+
+
+
 }

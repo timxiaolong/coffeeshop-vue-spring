@@ -6,6 +6,7 @@ import store from './store';
 
 import './assets/css/common.less';
 import './assets/font/iconfont.css';
+import Admin from "./router/admin";
 
 Vue.config.productionTip = false;
 

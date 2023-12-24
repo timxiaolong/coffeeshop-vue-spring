@@ -8,7 +8,7 @@
   	<div class="content">
   		<ul class="clear">
   			<li v-for="(item,index) in goodsList" :key="'goods'+item.id">
-  				<img :src="item.img" alt="" />
+  				<img :src="item.picture" alt="" />
   				<span>{{item.name}}</span>
   				<div>
   					<button class="normalBtn" @click="navTo('/backstage/goods/'+item.id)">编辑</button>
@@ -36,6 +36,7 @@
 import {getGoods,getTypes,addType,deleteGoods} from '../../api/admin';
 import Tag from '../../components/Tag';
 import Popup from '../../components/Popup';
+import axios from "axios";
 export default {
   name: 'Goods',
   components:{
@@ -72,14 +73,24 @@ export default {
   		})
   	},
   	getTypes(){
-  		const res = getTypes();
-  		res.then((data)=>{
-  			this.tags = data;
-  			this.changeTag(this.curIndex);
-  		})
-  		.catch((e)=>{
-  			alert(e);
-  		})
+  		// const res = getTypes();
+  		// res.then((data)=>{
+  		// 	this.tags = data;
+  		// 	this.changeTag(this.curIndex);
+  		// })
+  		// .catch((e)=>{
+  		// 	alert(e);
+  		// })
+      axios({
+        url:'http://localhost:8080/menu/getmenu',
+        method:'GET'
+      }).then(result =>{
+        console.log(result)
+        this.goodsList = result.data
+      }).catch(e =>{
+        console.dir(e)
+      })
+      console.log(this.types)
   	},
   	addType(){
   		this.popupShow = true;

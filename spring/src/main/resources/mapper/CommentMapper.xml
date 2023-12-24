@@ -7,6 +7,7 @@
         <id column="commentid" property="commentid" />
         <result column="userid" property="userid" />
         <result column="itemid" property="itemid" />
+        <result column="itemname" property="itemname" />
         <result column="rating" property="rating" />
         <result column="commentcontent" property="commentcontent" />
         <result column="commenttime" property="commenttime" />
@@ -14,7 +15,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        commentid, userid, itemid, rating, commentcontent, commenttime
+        commentid, userid, itemid, itemname, rating, commentcontent, commenttime
     </sql>
 
 </mapper>

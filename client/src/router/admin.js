@@ -3,16 +3,16 @@ import Router from 'vue-router'
 
 import store from '@/store';
 
-import AdminLogin from '@/pages/admin/AdminLogin' 
+import AdminLogin from '@/pages/admin/AdminLogin'
 import Backstage from '@/pages/admin/Backstage'
-import EditUser from '@/pages/admin/EditUser' 
+import EditUser from '@/pages/admin/EditUser'
 import EditAdmin from '@/pages/admin/EditAdmin'
-import Goods from '@/pages/admin/Goods' 
-import Orders from '@/pages/admin/Orders' 
+import Goods from '@/pages/admin/Goods'
+import Orders from '@/pages/admin/Orders'
 import EditOrders from '@/pages/admin/EditOrders'
 import EditGoods from '@/pages/admin/EditGoods'
-import Messages from '@/pages/admin/Messages' 
-import ErrorPage from '@/pages/ErrorPage' 
+import Messages from '@/pages/admin/Messages'
+import ErrorPage from '@/pages/ErrorPage'
 
 Vue.use(Router)
 
@@ -82,11 +82,12 @@ let router = new Router({
           },
         }
       ]
-    },{//404页面
-    	path:'*',
-    	name:'ErrorPage',
-    	component: ErrorPage
-    }
+    },
+    // {//404页面
+    // 	path:'*',
+    // 	name:'ErrorPage',
+    // 	component: ErrorPage
+    // }
   ],
   scrollBehavior (to, from, savedPosition) {
     if (savedPosition) {
@@ -98,19 +99,19 @@ let router = new Router({
 });
 
 //登录拦截
-router.beforeEach((to,from,next) => {
-  if(to.meta.requireLogin){
-    if(store.state.adminToken){
-      next()
-    }else{
-      next({
-        path: '/login',
-        query:{redirect: to.fullPath}
-      })
-    }
-  }else{
-    next();
-  }
-});
+// router.beforeEach((to,from,next) => {
+//   if(to.meta.requireLogin){
+//     if(store.state.adminToken){
+//       next()
+//     }else{
+//       next({
+//         path: '/login',
+//         query:{redirect: to.fullPath}
+//       })
+//     }
+//   }else{
+//     next();
+//   }
+// });
 
 export default router;

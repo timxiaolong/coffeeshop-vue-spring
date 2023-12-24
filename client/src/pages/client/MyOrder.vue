@@ -28,17 +28,20 @@
             <span class="unitPrice">{{'￥'+item.price}}</span>
             <span class="num">{{item.num}}</span>
 <!--            <span class="amount">{{'￥'+item.amount}}</span>-->
-              <button v-if="item.status===0" @click="confirmPay(item.id);centerDialogVisible = true">确认付款</button>
-              <button v-else-if="item.status===2" @click="confirmReceive(item.id)">确认收货</button>
+              <button class="sysbutton" v-if="item.status===0" @click="confirmPay(item.id);centerDialogVisible = true">确认付款</button>
+              <button class="sysbutton" v-else-if="item.status===2" @click="confirmReceive(item.id)">确认收货</button>
               <el-dialog
                 title="提示"
                 :visible.sync="centerDialogVisible"
-                width="30%"
-                center>
-                <img src="../../assets/img/banner1.jpg">
-                <span slot="footer" class="dialog-footer">
+                width="50%"
+                center
+                >
+                <div style="align-content: center;text-align: center" class="code ">
+                <img  src="../../assets/img/code2.png">
+                </div>
+                <span  slot="footer" class="dialog-footer">
                 <el-button @click="centerDialogVisible = false">取 消</el-button>
-                <el-button @click="centerDialogVisible = false">我已付款</el-button>
+                <el-button type="primary" @click="centerDialogVisible = false">我已付款</el-button>
               </span>
               </el-dialog>
 <!--            <button v-else-if="item.status===3 && !item.hasComment" @click="showPopup(item.id,item.goods.id,item.goods.goodsDetailId)">评价</button>-->
@@ -273,6 +276,18 @@ export default {
       border-bottom: 2px solid @thirdColor;
     }
   }
+  .code{
+    img{
+      display: block;
+      margin: 0 auto;
+    }
+    span{
+      font-size: 12px;
+      color:@thirdColor;
+      margin-top: 10px;
+      display: block;
+    }
+  }
   .orderBox{
     width: 100%;
     margin-top: 20px;
@@ -354,7 +369,7 @@ export default {
             line-height: 85px;
             text-align: center;
           }
-          button{
+          .sysbutton{
             position: absolute;
             right: 90px;
             bottom: 40px;
