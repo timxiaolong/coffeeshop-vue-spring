@@ -13,6 +13,11 @@
         <span>密码</span>
         <button @click="dialogFormVisible = true">修改密码</button>
       </li>
+      <li>
+        <span>会员身份</span>
+        <span>您还不是会员哦~</span>
+        <button @click="dialogVipVisble = true">办理会员</button>
+      </li>
     </ul>
     <button @click="updateUserData" class="saveBtn">保存</button>
 
@@ -33,19 +38,22 @@
         <el-button type="primary" @click="updatePwd">确 定</el-button>
       </div>
     </el-dialog>
-    <!--    <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>-->
 
-    <!--    <Popup title="修改密码" @popupClose="closePopup" v-show="popupShow">-->
-    <!--      <div class="popupContent" slot="popupContent">-->
-    <!--        <input type="password" v-model="oldPwd" placeholder="请输入原密码" />-->
-    <!--        <input type="password" v-model="newPwd" placeholder="请输入新密码" />-->
-    <!--        <input type="password" v-model="confirmPwd" placeholder="请再次输入新密码" />-->
-    <!--        <el-input type="password" v-model="oldPwd" placeholder="请输入原密码"></el-input>-->
-    <!--        <el-input type="password" v-model="newPwd" placeholder="请输入新密码"></el-input>-->
-    <!--        <el-input type="password" v-model="confirmPwd" placeholder="请再输入一次密码"></el-input>-->
-    <!--        <button @click="updatePwd">确认修改</button>-->
-    <!--      </div>-->
-    <!--    </Popup>-->
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVipVisble"
+      width="50%"
+      center
+    >
+      <div style="align-content: center;text-align: center" class="code ">
+        <span>会费10元/月，请按需办理，扫码支付，感谢对网站的支持！</span><br/><br/>
+        <img class="payImg" src="../../assets/img/code2.png">
+      </div>
+      <span  slot="footer" class="dialog-footer">
+                <el-button @click="dialogVipVisble = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVipVisble = false">我已付款，确认办理</el-button>
+              </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -81,6 +89,7 @@ export default {
 
       dialogTableVisible: false,
       dialogFormVisible: false,
+      dialogVipVisble: false,
       form: {
         oldPwd:'',
         newPwd:'',
@@ -213,7 +222,7 @@ export default {
 
       span {
         display: inline-block;
-        width: 100px;
+        width: 150px;
         height: 20px;
       }
 
@@ -256,6 +265,12 @@ export default {
     height: 35px;
     display: block;
     margin: 10px auto;
+  }
+
+  .payImg{
+    width: 120px;
+    height: 120px;
+    display: inline-block;
   }
 
   .popupContent {

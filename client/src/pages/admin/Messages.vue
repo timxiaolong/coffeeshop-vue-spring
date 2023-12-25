@@ -15,7 +15,7 @@
   				</div>
   				<div class="operate">
   					<div>{{item.commenttime}}</div>
-  					<button @click="reply(item.id)">回复</button>
+  					<button @click="reply(item.id)">删除</button>
   				</div>
   			</li>
   		</ul>
