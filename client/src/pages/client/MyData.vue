@@ -147,8 +147,9 @@ export default {
     showPopup() {
       this.popupShow = true;
     },
-    updatePwd(done) {
-      if (this.newPwd !== this.confirmPwd) {
+    updatePwd() {
+      console.log(this.form.newPwd,this.form.confirmPwd)
+      if (this.form.newPwd !== this.form.confirmPwd) {
         this.$message({
           message:'两次输入的密码不一致！',
           type:"warning"
@@ -165,7 +166,7 @@ export default {
         }
       }).then(result =>{
         console.log(result)
-        this.dialogFormVisible = false
+
         this.form.confirmPwd = ''
         this.form.oldPwd = ''
         this.form.newPwd = ''
@@ -174,6 +175,7 @@ export default {
             message:result.data.message,
             type:"success"
           })
+          this.dialogFormVisible = false
         }else {
           this.$message({
             message:result.data.message,

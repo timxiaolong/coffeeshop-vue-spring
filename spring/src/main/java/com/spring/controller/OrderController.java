@@ -55,4 +55,9 @@ public class OrderController {
 //        lambdaQueryWrapper.eq(Orders::getId, id);
         return ordersService.getById(id);
     }
+
+    @PutMapping("/changeorder")
+    public boolean changeOrders(@RequestBody Orders orders){
+        return true;
+    }
 }

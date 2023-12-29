@@ -143,7 +143,10 @@ export default {
 
     addToCart() {
       if (!localStorage.getItem('id')) {
-        alert('请先登录！');
+        this.$notify.error({
+          title: '错误',
+          message: '您还没有登陆，请先登陆后再试'
+        });
         return;
       }
       const res = addOrder({
@@ -164,7 +167,10 @@ export default {
 
     buy() {
       if (!localStorage.getItem('id')) {
-        alert('请先登录！');
+        this.$notify.error({
+          title: '错误',
+          message: '您还没有登陆，请先登陆后再试'
+        });
         return;
       }
       // const res = addOrder({

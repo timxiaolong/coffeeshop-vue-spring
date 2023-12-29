@@ -68,15 +68,19 @@ export default {
   		})
   	},
   	searchUser(){
-  		const val = this.$refs.input.value;
-  		const res = getSearchUser(val);
-  		res
-  		.then((data)=>{
-  			this.userList = data;
-  		})
-  		.catch((e)=>{
-  			alert(e);
-  		})
+  		// const val = this.$refs.input.value;
+  		// const res = getSearchUser(val);
+  		// res
+  		// .then((data)=>{
+  		// 	this.userList = data;
+  		// })
+  		// .catch((e)=>{
+  		// 	alert(e);
+  		// })
+      this.$notify.error({
+        title: '错误',
+        message: '未搜到当前用户'
+      });
   	},
   }
 }

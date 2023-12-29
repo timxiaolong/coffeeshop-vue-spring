@@ -8,12 +8,12 @@
         <span>商品名称：</span>
         <TextInput class="long" placeholder="请输入商品名称" v-model="goodsName" :initText="goodsName"/>
       </div>
-      <div class="inputBox">
-        <span>选择类目：</span>
-        <Radio v-for="(item,index) in types" :key="item.id" v-model="temTypeId" :initVal="String(initTypeId)" radioName="type" :radioVal="String(item.id)">
-          <span class="tips" slot="tips">{{item.name}}</span>
-        </Radio>
-      </div>
+<!--      <div class="inputBox">-->
+<!--        <span>选择类目：</span>-->
+<!--        <Radio v-for="(item,index) in types" :key="item.id" v-model="temTypeId" :initVal="String(initTypeId)" radioName="type" :radioVal="String(item.id)">-->
+<!--          <span class="tips" slot="tips">{{item.name}}</span>-->
+<!--        </Radio>-->
+<!--      </div>-->
       <div class="inputBox">
         <span>图片地址：</span>
         <TextInput class="long" placeholder="请输入图片地址" v-model="goodsImg" :initText="goodsImg"/>
@@ -97,38 +97,42 @@ export default {
       this.$router.go(-1);
     },
     saveChange(){
-      if(this.id==='new'){
-        const res = addGoods({
-          name:this.goodsName,
-          typeId:this.temTypeId,
-          img:this.goodsImg,
-          desc:this.desc,
-          specList:this.specList
-        });
-        res
-        .then(()=>{
-          alert('创建商品成功！')
-        })
-        .catch((e)=>{
-          alert(e);
-        })
-      }else{
-        const res = updateGoods({
-          id:this.id,
-          name:this.goodsName,
-          typeId:this.temTypeId,
-          img:this.goodsImg,
-          desc:this.desc,
-          specList:this.specList
-        });
-        res
-        .then(()=>{
-          alert('修改成功！')
-        })
-        .catch((e)=>{
-          alert(e);
-        })
-      }
+      this.$notify.error({
+        title: '错误',
+        message: '有选项未填写，请重试'
+      });
+      // if(this.id==='new'){
+      //   const res = addGoods({
+      //     name:this.goodsName,
+      //     typeId:this.temTypeId,
+      //     img:this.goodsImg,
+      //     desc:this.desc,
+      //     specList:this.specList
+      //   });
+      //   res
+      //   .then(()=>{
+      //     alert('创建商品成功！')
+      //   })
+      //   .catch((e)=>{
+      //     alert(e);
+      //   })
+      // }else{
+      //   const res = updateGoods({
+      //     id:this.id,
+      //     name:this.goodsName,
+      //     typeId:this.temTypeId,
+      //     img:this.goodsImg,
+      //     desc:this.desc,
+      //     specList:this.specList
+      //   });
+      //   res
+      //   .then(()=>{
+      //     alert('修改成功！')
+      //   })
+      //   .catch((e)=>{
+      //     alert(e);
+      //   })
+      // }
     },
     closePopup(){
       this.popupShow = false;

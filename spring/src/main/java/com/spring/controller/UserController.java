@@ -30,21 +30,23 @@ public class UserController {
     public Message Login(@RequestParam("username") String name, @RequestParam("password") String password){
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.like(User::getName,name);
-        List<User> dbUser= userService.list(lambdaQueryWrapper);
-        System.out.println(dbUser);
-        if (dbUser == null){// 如果没找到
-            return new Message("账号或者密码不正确",400,null);
-        }else if (!dbUser.get(0).getPassword().equals(password)){//如果密码不对
-            return new Message("账号或密码不正确",400,null);
-        }else {
-            return new Message("登陆成功",200,dbUser.get(0));
+        try {
+            List<User> dbUser= userService.list(lambdaQueryWrapper);
+            if (!dbUser.get(0).getPassword().equals(password)){//如果密码不对
+                return new Message("账号或密码不正确",400,null);
+            }else {
+                return new Message("登陆成功",200,dbUser.get(0));
+            }
+        }catch (Exception e){
+                return new Message("账号或者密码不正确",400,null);
         }
+
+
     }
 
     @PostMapping("/signin")
     public boolean Signin(@RequestBody User user){
-        userService.save(user);
-        return true;
+        return userService.save(user);
     }
 
     @PostMapping("/changepwd")
@@ -85,5 +87,10 @@ public class UserController {
     @GetMapping("/getalluser")
     public List<User> getAllUser(){
         return userService.list();
+    }
+
+    @DeleteMapping("/deleuserbyid")
+    public boolean deleUserById(@RequestParam Integer id){
+        return true;
     }
 }
