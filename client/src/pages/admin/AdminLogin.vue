@@ -14,6 +14,7 @@
 import { mapMutations } from 'vuex'
 import {getClientSize} from '../../util/util';
 import {login} from '../../api/admin';
+import axios from "axios";
 
 export default {
   name: 'AdminLogin',
@@ -35,20 +36,37 @@ export default {
       setAdminToken: 'SET_ADMIN_TOKEN'
     }),
     login(){
-      const account = this.$refs.account.value;
+      const username = this.$refs.account.value;
       const pwd = this.$refs.pwd.value;
-      const res = login({
-        account:account,
-        pwd:pwd
-      });
-      res
-      .then((data)=>{
-        this.setAdminName(data.name);
-        this.setAdminToken(data.token);
-        this.$router.push('/backstage');
-      })
-      .catch((e)=>{
-        alert('登录失败')
+    //   const res = login({
+    //     account:account,
+    //     pwd:pwd
+    //   });
+    //   res
+    //   .then((data)=>{
+    //     this.setAdminName(data.name);
+    //     this.setAdminToken(data.token);
+    //     this.$router.push('/backstage');
+    //   })
+    //   .catch((e)=>{
+    //     alert('登录失败')
+    //   })
+      axios({
+        url:'http://localhost:8080/admin/login',
+        method:'GET',
+        params:{
+          username:username,
+          password:pwd
+        }
+      }).then(result=>{
+        console.log(result)
+        if (result.data.status === 200){
+          localStorage.setItem('username',result.data.param.username)
+          this.$message.success("登录成功")
+          setTimeout("location.href=\"#/backstage\"",3000)
+        }else {
+          this.$message.error(result.data.message)
+        }
       })
     }
   }

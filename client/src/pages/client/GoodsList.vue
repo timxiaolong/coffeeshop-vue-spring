@@ -9,12 +9,12 @@
       </span>
     </div>
     <ul class="result">
-      <GoodsItem 
-        v-for="(item,index) in sortedList" 
+      <GoodsItem
+        v-for="(item,index) in sortedList"
         :style="{marginRight: (index+1)%4===0?'0px':'25px'}"
         :key="+item.id"
         :id="item.id"
-        :img="item.img"
+        :img="item.picture"
         :name="item.name"
         :price="item.price"
       />
@@ -26,6 +26,7 @@
 <script>
 import {getGoodsList,searchGoods} from '../../api/client';
 import GoodsItem from '../../components/GoodsItem';
+import axios from "axios";
 
 export default {
   name: 'GoodsList',
@@ -66,21 +67,38 @@ export default {
 
   methods:{
     getGoodsList(typeId){
-      const res = getGoodsList(typeId);
-      res.then((data)=>{
-        this.goodsList = data;
-      })
-      .catch((e)=>{
-        alert(e);
+      axios({
+        url:'http://localhost:8080/menu/getmenubytype',
+        method:'GET',
+        params:{
+          type: typeId
+        }
+      }).then(result =>{
+        console.log(result)
+        this.goodsList = result.data
+
+      }).catch(err =>{
+        console.dir(err)
       })
     },
     searchGoods(keyword){
-      const res = searchGoods(keyword);
-      res.then((data)=>{
-        this.goodsList = data;
-      })
-      .catch((e)=>{
-        alert(e);
+      // const res = searchGoods(keyword);
+      // res.then((data)=>{
+      //   this.goodsList = data;
+      // })
+      // .catch((e)=>{
+      //   alert(e);
+      // })
+      axios({
+        url:'http://localhost:8080/menu/getMenuByKeyword',
+        method:'GET',
+        params:{
+          Keyword: keyword
+        }
+      }).then(result =>{
+        this.goodsList = result.data
+      }).catch(err=>{
+        console.dir(err)
       })
     },
     changeSortMode(mode){
@@ -101,7 +119,7 @@ export default {
     else{
       this.searchGoods(this.keyword);
     }
-    
+
   },
 
   watch:{

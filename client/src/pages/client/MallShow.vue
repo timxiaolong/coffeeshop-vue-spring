@@ -28,6 +28,7 @@
         <i class="iconfont icon-search" @click="searchConfirm"/>
       </div>
     </div>
+
     <ul ref="typeList" class="typeList">
       <li
         v-for="(item,index) in typeList"
@@ -46,6 +47,7 @@
 import {getTypes,getGoodsList} from '../../api/client';
 import TipsInput from '../../components/TipsInput';
 import FixedNav from '../../components/FixedNav';
+import axios from "axios";
 
 export default {
   name: 'MallShow',
@@ -105,6 +107,7 @@ export default {
         return;
       }
       this.navTo(`/mall/show/goodsList/0/${this.searchText}`);
+      this.searchText = ''
     },
     scrollHandle(){
       const top = this.$refs.typeList.getBoundingClientRect().top;
@@ -120,19 +123,15 @@ export default {
   },
 
   mounted(){
-    //获取数据
-    const res = getTypes();
-    res
-    .then((data)=>{
-      data.unshift({
-        id:-1,
-        name:'首页'
-      });
-      this.typeList = data;
+    // 获取种类
+    axios({
+      url:'http://localhost:8080/type/getalltype',
+      method:'GET'
+    }).then(result =>{
+      this.typeList = result.data
+    }).catch(err =>{
+      console.dir(err)
     })
-    .catch((e)=>{
-      alert(e);
-    });
 
     //监听滚动事件
     document.addEventListener('scroll',this.scrollHandle,false);
@@ -151,6 +150,19 @@ export default {
 
 <style scoped lang="less">
 @import "../../assets/css/var.less";
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+.el-col {
+  border-radius: 4px;
+}
+.row-bg {
+  padding: 10px 0;
+  background-color: #f9fafc;
+}
 .MallShow{
   width: 100%;
   .logo{

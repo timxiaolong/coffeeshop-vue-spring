@@ -36,13 +36,14 @@ export default {
   data(){
     return{
       userTipsShow:false,
-      curPath:this.$route.path
+      curPath:this.$route.path,
+      adminName:''
     }
   },
   computed:{
-    ...mapState([
-      'adminName'
-    ]),
+    // ...mapState([
+    //   'adminName'
+    // ]),
     width(){
       return getClientSize().width;
     },
@@ -75,6 +76,9 @@ export default {
     '$route'(to,from){
         this.curPath = to.path;
     }
+  },
+  mounted() {
+    this.adminName = localStorage.getItem('username')
   }
 }
 </script>
@@ -164,6 +168,6 @@ export default {
         }
       }
     }
-  } 
+  }
 }
 </style>

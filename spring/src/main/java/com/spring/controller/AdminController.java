@@ -4,6 +4,7 @@ package com.spring.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.spring.entity.Admin;
 import com.spring.entity.Menu;
+import com.spring.entity.Message;
 import com.spring.entity.User;
 import com.spring.service.AdminService;
 import com.spring.service.UserService;
@@ -30,15 +31,16 @@ public class AdminController {
 
 
     @GetMapping("/login")
-    public Admin Login(@RequestParam("username") String username,@RequestParam("password") String password){
+    public Message Login(@RequestParam("username") String username, @RequestParam("password") String password){
         LambdaQueryWrapper<Admin> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.like(Admin::getUsername,username);
-        List<Admin> dbAdmin= adminService.list(lambdaQueryWrapper);
-        System.out.println(dbAdmin);
+        lambdaQueryWrapper.eq(Admin::getUsername,username);
+        Admin dbAdmin = adminService.getOne(lambdaQueryWrapper);
         if (dbAdmin == null){
-            return null;
+            return new Message("没有找到用户",400,null);
+        }else if (!dbAdmin.getPassword().equals(password)){
+            return new Message("用户名或密码不正确",500,null);
         }else {
-            return dbAdmin.get(0);
+            return new Message("登陆成功",200,dbAdmin);
         }
     }
 

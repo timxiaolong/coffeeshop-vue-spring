@@ -9,7 +9,6 @@
       <div class="formBox" v-show="curIndex===0">
         <input class="name" type="text" placeholder="账号"/>
         <input class="password" type="password" placeholder="密码"/>
-        <el-checkbox v-model="checked">管理员</el-checkbox>
         <button @click="login">登录</button>
       </div>
       <form class="signin-form" v-show="curIndex===1">
@@ -59,25 +58,6 @@ export default {
       console.log("login")
       const name = document.querySelector('.name').value
       const password = document.querySelector('.password').value
-      if (this.checked){//如果是管理员
-        axios({
-          url:'http://localhost:8080/admin/login',
-          method:'GET',
-          params: {
-            username: name,
-            password: password
-          }
-        }).then(result =>{
-          if (result.status === 200){
-            this.$message("欢迎您，管理员")
-            this.$router.push('/');
-          }else {
-            this.$message.error("用户名或密码错误")
-          }
-        }).catch(err => {
-
-        })
-      }else {//普通用户
         axios({
           url:'http://localhost:8080/user/login',
           method: 'GET',
@@ -99,7 +79,7 @@ export default {
         }).catch(err => {
           console.dir(err)
         })
-      }
+
 
     },
     signup() {

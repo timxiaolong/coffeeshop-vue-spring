@@ -1,6 +1,7 @@
 package com.spring.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.spring.entity.Menu;
 import com.spring.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,19 @@ public class MenuController {
     public Menu GetById(@RequestParam("id") String id){
         System.out.println(id);
         return menuService.getById(id);
+    }
+
+    @GetMapping("/getmenubytype")
+    public List<Menu> getMenuByType(@RequestParam Integer type){
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Menu::getTypeid,type);
+        return menuService.list(wrapper);
+    }
+
+    @GetMapping("/getMenuByKeyword")
+    public List<Menu> getMenuByKeyword(@RequestParam String Keyword){
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(Menu::getName,Keyword);
+        return menuService.list(wrapper);
     }
 }

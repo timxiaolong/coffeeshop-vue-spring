@@ -35,54 +35,70 @@ export default {
   		userList:[]
   	}
   },
-  mounted(){
-    axios({
-      url:'http://localhost:8080/user/getalluser',
-      method:'GET',
-    }).then(result =>{
-      this.userList = result.data
-      console.log(this.userList)
-      for (let i = 0; i < this.userList.length; i++) {
-        if (this.userList[i].isVip === 0){
-          this.userList[i].isVip = "是"
-        }else {
-          this.userList[i].isVip = "否"
-        }
-      }
-    })
-  },
   methods:{
+    getAll(){
+      axios({
+        url:'http://localhost:8080/user/getalluser',
+        method:'GET',
+      }).then(result =>{
+        this.userList = result.data
+        console.log(this.userList)
+        for (let i = 0; i < this.userList.length; i++) {
+          if (this.userList[i].isVip === 0){
+            this.userList[i].isVip = "是"
+          }else {
+            this.userList[i].isVip = "否"
+          }
+        }
+      })
+    },
   	deleteUser(id){
-  		const res = deleteUser(id);
-  		res
-  		.then(()=>{
-  			alert('删除成功');
-  			this.userList.map((item,index)=>{
-  				if(item.id===id){
-  					this.userList.splice(index,1);
-  				}
-  			})
-  		})
-  		.catch((e)=>{
-  			alert(e);
-  		})
+      axios({
+        url:"http://localhost:8080/user/deleuserbyid",
+        method:'DELETE',
+        params:{
+          id:id
+        }
+      }).then(result =>{
+        if (result.data){
+          this.$notify({
+            title: '成功',
+            message: '删除成功',
+            type: 'success'
+          });
+          this.getAll()
+        }else {
+          this.$notify({
+            title: '出错了',
+            message: '删除失败',
+            type: 'warning'
+          });
+        }
+      })
   	},
   	searchUser(){
-  		// const val = this.$refs.input.value;
-  		// const res = getSearchUser(val);
-  		// res
-  		// .then((data)=>{
-  		// 	this.userList = data;
-  		// })
-  		// .catch((e)=>{
-  		// 	alert(e);
-  		// })
-      this.$notify.error({
-        title: '错误',
-        message: '未搜到当前用户'
-      });
+      axios({
+        url:'http://localhost:8080/user/getUserByName',
+        method:'GET',
+        params:{
+          username: this.$refs.input.value
+        }
+      }).then(result =>{
+        if (result.data.size === 0){
+          this.$notify.error({
+            title: '错误',
+            message: '未搜到当前用户'
+          });
+        }else {
+          this.userList = result.data
+        }
+      })
+
   	},
-  }
+  },
+  mounted(){
+    this.getAll()
+  },
 }
 </script>
 

@@ -91,6 +91,13 @@ public class UserController {
 
     @DeleteMapping("/deleuserbyid")
     public boolean deleUserById(@RequestParam Integer id){
-        return true;
+        return userService.removeById(id);
+    }
+
+    @GetMapping("/getUserByName")
+    public List<User> getUserByName(@RequestParam String username){
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.like(User::getName,username);
+        return userService.list(lambdaQueryWrapper);
     }
 }

@@ -12,7 +12,8 @@
         <div class="right" v-else>
           <span @click="navTo('/login')">登录</span>
           <span @click="navTo('/login')">注册</span>
-          <span @click="navTo('/backstage/editUser')">我是管理员</span>
+          <span><a href="http://localhost:8081/admin.html" style="color: white">我是管理员</a></span>
+
         </div>
       </div>
     </header>
