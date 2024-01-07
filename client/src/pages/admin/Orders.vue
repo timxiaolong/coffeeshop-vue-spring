@@ -41,7 +41,7 @@ export default {
   },
   data(){
   	return{
-  		tags:['全部','未付款','未发货','已发货','已到货'],
+  		tags:['全部','未付款','待制作','待取餐','已完成'],
   		orderList:[]
   	}
   },
@@ -55,30 +55,66 @@ export default {
   		// .catch((e)=>{
   		// 	alert(e);
   		// })
+      console.log(index)
       axios({
-        url:'http://localhost:8080/order/getallorder',
-        method:'GET'
+        url:'http://localhost:8080/admin/getOrderByStatus',
+        method:'GET',
+        params:{
+          status:index
+        }
       }).then(result =>{
         this.orderList = result.data
+        console.log(this.orderList)
+        for (let i = 0; i < this.orderList.length; i++) {
+          if (this.orderList[i].status === 1){
+            this.orderList[i].status = '待付款'
+          }else if (this.orderList[i].status === 2){
+            this.orderList[i].status = '待制作'
+          }else if (this.orderList[i].status === 3){
+            this.orderList[i].status = '待取餐'
+          }else if (this.orderList[i].status === 4){
+            this.orderList[i].status = '已完成'
+          }
+        }
       })
   	},
   	editOrder(id){
   		this.$router.push('/backstage/orders/'+id)
   	},
   	deleteOrder(id){
-  		const res = deleteOrder(id);
-  		res
-  		.then(()=>{
-  			alert('删除成功');
-  			this.orderList.map((item,index)=>{
-  				if(item.id===id){
-  					this.orderList.splice(index,1);
-  				}
-  			})
-  		})
-  		.catch((e)=>{
-  			alert(e);
-  		})
+  		// const res = deleteOrder(id);
+  		// res
+  		// .then(()=>{
+  		// 	alert('删除成功');
+  		// 	this.orderList.map((item,index)=>{
+  		// 		if(item.id===id){
+  		// 			this.orderList.splice(index,1);
+  		// 		}
+  		// 	})
+  		// })
+  		// .catch((e)=>{
+  		// 	alert(e);
+  		// })
+      axios({
+        url:'http://localhost:8080/order/deleOrderById',
+        method:'DELETE',
+        params:{
+          id:id
+        }
+      }).then(result =>{
+        if (result){
+          this.$notify.success({
+            title:'成功',
+            message:'删除成功！'
+          })
+        }else {
+          this.$notify.error({
+            title:'失败',
+            message:'操作失败'
+          })
+        }
+        this.changeTag(0);
+      })
   	}
   },
   mounted(){

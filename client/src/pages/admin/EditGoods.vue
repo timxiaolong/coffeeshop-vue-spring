@@ -3,42 +3,33 @@
     <header class="clear">
       <span>商品编辑</span>
     </header>
-    <div class="content">
-      <div class="inputBox">
-        <span>商品名称：</span>
-        <TextInput class="long" placeholder="请输入商品名称" v-model="goodsName" :initText="goodsName"/>
-      </div>
-<!--      <div class="inputBox">-->
-<!--        <span>选择类目：</span>-->
-<!--        <Radio v-for="(item,index) in types" :key="item.id" v-model="temTypeId" :initVal="String(initTypeId)" radioName="type" :radioVal="String(item.id)">-->
-<!--          <span class="tips" slot="tips">{{item.name}}</span>-->
-<!--        </Radio>-->
-<!--      </div>-->
-      <div class="inputBox">
-        <span>图片地址：</span>
-        <TextInput class="long" placeholder="请输入图片地址" v-model="goodsImg" :initText="goodsImg"/>
-      </div>
-      <div class="inputBox">
-        <span class="verTop">规格详情：</span>
-        <ul>
-          <li v-for="(item,index) in specList" :key="index">
-            <span>名称：</span><TextInput placeholder="请输入规格名称" v-model="item.specName" :initText="item.specName"/>
-            <span>库存量：</span><input type="text" class="numInput" v-model.trim.number="item.stockNum"/>
-            <span>价格：</span><input type="text" class="numInput" v-model.trim.number="item.unitPrice"/>
-            <button v-show="specList.length>1" @click="deleteSpec(item.specName)"><i class="iconfont icon-close" /></button>
-          </li>
-          <li class="addSpec" @click="showPopup">添加规格</li>
-        </ul>
-      </div>
-      <div class="inputBox">
-        <span>详情描述：</span>
-        <TextInput class="long" placeholder="请输入简单描述" v-model="desc" :initText="desc"/>
-      </div>
-      <div class="btnBox">
-        <button class="confirmBtn" @click="saveChange">保存修改</button>
-        <button class="normalBtn" @click="back">返回</button>
-      </div>
-    </div>
+        <div class="content">
+    <el-form ref="form" :model="form" label-width="80px" :rules = "rules" class="my-form">
+      <el-form-item label="商品名称" prop="name">
+        <el-input v-model="form.name" name="name"></el-input>
+      </el-form-item>
+      <el-form-item label="品类">
+        <el-radio-group v-model="form.typeid"
+                        v-for="(item,index) in types" :key="item.id" :initVal="String(initTypeId)" radioName="type" :radioVal="String(item.id)">
+          <el-radio :label=index+1 v-model="form.type" name="type">{{item.name}}</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="图片地址">
+        <el-input v-model="form.picture" name="picture"></el-input>
+      </el-form-item>
+      <el-form-item label="价格" prop="price">
+        <el-input v-model="form.price" name="price"></el-input>
+      </el-form-item>
+      <el-form-item label="商品描述">
+        <el-input type="textarea" v-model="form.describtion" name="describtion"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="saveChange">立即创建</el-button>
+        <el-button @click="back">取消</el-button>
+      </el-form-item>
+    </el-form>
+        </div>
+
     <Popup title="添加规格" @popupClose="closePopup" v-show="popupShow">
       <div class="popupContent" slot="popupContent">
         <input type="text" ref="specNameInput" placeholder="请输入规格名称" />
@@ -47,9 +38,10 @@
         <button @click="addConfirm">确认</button>
       </div>
     </Popup>
-  </div>
-</template>
 
+  </div>
+
+</template>
 <script>
 import Popup from '../../components/Popup';
 import TextInput from '../../components/TextInput';
@@ -79,60 +71,65 @@ export default {
           stockNum:0,
           unitPrice:0,
         }
-      ]
+      ],
+      form: {
+        name: '',
+        price: 0,
+        picture:'',
+        typeid:0,
+        describtion: ''
+      },
+      rules:{
+        name:[{required :true, message:'请输入商品名称', trigger:'blur'}],
+        price: [{required: true, message:'请输入价格', trigger:'blur'}]
+      }
     }
   },
   methods:{
     getTypes(){
-      const res = getTypes();
-      res
-      .then((data)=>{
-        this.types = data;
-      })
-      .catch((e)=>{
-        alert(e)
+      axios({
+        url:'http://localhost:8080/type/getalltype',
+        method:'GET'
+      }).then(result =>{
+        this.types = result.data
       })
     },
     back(){
       this.$router.go(-1);
     },
     saveChange(){
-      this.$notify.error({
-        title: '错误',
-        message: '有选项未填写，请重试'
-      });
-      // if(this.id==='new'){
-      //   const res = addGoods({
-      //     name:this.goodsName,
-      //     typeId:this.temTypeId,
-      //     img:this.goodsImg,
-      //     desc:this.desc,
-      //     specList:this.specList
-      //   });
-      //   res
-      //   .then(()=>{
-      //     alert('创建商品成功！')
-      //   })
-      //   .catch((e)=>{
-      //     alert(e);
-      //   })
-      // }else{
-      //   const res = updateGoods({
-      //     id:this.id,
-      //     name:this.goodsName,
-      //     typeId:this.temTypeId,
-      //     img:this.goodsImg,
-      //     desc:this.desc,
-      //     specList:this.specList
-      //   });
-      //   res
-      //   .then(()=>{
-      //     alert('修改成功！')
-      //   })
-      //   .catch((e)=>{
-      //     alert(e);
-      //   })
-      // }
+      // this.$notify.error({
+      //   title: '错误',
+      //   message: '有选项未填写，请重试'
+      // });
+      // const form = document.querySelector('.my-form')
+      // const data = serialize(form,{hash:true,empty:true})
+      console.log(this.form)
+      axios({
+        url:'http://localhost:8080/menu/changeGoods',
+        method:'POST',
+        data:this.form
+      }).then(result =>{
+        if (result){
+          if(this.id==='new') {
+            this.$notify.success({
+              title:'成功',
+              message:'商品成功添加！'
+            })
+          }else {
+            this.$notify.success({
+              title:'成功',
+              message:'商品成功修改！'
+            })
+          }
+        }else {
+          this.$notify.error({
+            title:'错误',
+            message:'商品操作失败！'
+          })
+        }
+
+      })
     },
     closePopup(){
       this.popupShow = false;

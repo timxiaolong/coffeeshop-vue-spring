@@ -36,4 +36,9 @@ public class CommentController {
         return commentService.list();
     }
 
+    @DeleteMapping("/deleById")
+    public boolean deleById(@RequestParam Integer id){
+        return commentService.removeById(id);
+    }
+
 }

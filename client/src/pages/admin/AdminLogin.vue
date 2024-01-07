@@ -62,6 +62,7 @@ export default {
         console.log(result)
         if (result.data.status === 200){
           localStorage.setItem('username',result.data.param.username)
+          localStorage.setItem('adminId',result.data.param.id)
           this.$message.success("登录成功")
           setTimeout("location.href=\"#/backstage\"",3000)
         }else {

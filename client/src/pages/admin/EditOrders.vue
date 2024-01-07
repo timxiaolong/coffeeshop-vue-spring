@@ -16,21 +16,15 @@
         <span>总金额：</span>
         <span class="val">{{'¥'+amount}}</span>
       </div>
-<!--      <div class="inputBox">-->
-<!--        <span>规格：</span>-->
-<!--        <Radio v-for="(item,index) in spec" :key="item.id" v-model="temSpecId" :initVal="temSpecId" radioName="spec" :radioVal="item.id">-->
-<!--          <span class="tips" slot="tips">{{item.specName}}</span>-->
-<!--        </Radio>-->
-<!--      </div>-->
       <div class="inputBox">
         <span>数量：</span>
-        <NumberInput v-model="temNum" :initNum="temNum" :min="1" :max="999"/>
+        <NumberInput v-model="data.num" :initNum="data.num" :min="1" :max="999"/>
       </div>
       <div class="inputBox">
         <span>订单状态：</span>
-        <Radio v-for="(item,index) in states" :key="item.id" v-model="temStateId" :initVal="temStateId" radioName="state" :radioVal="item.id">
-          <span class="tips" slot="tips">{{item}}</span>
-        </Radio>
+        <el-radio-group v-for="(item,index) in states" :key="item.id" v-model="data.status" :initVal="data.status" radioName="state" :radioVal="item.id">
+          <el-radio :label = index>{{item}}</el-radio>
+        </el-radio-group>
       </div>
       <div class="btnBox">
         <button class="confirmBtn" @click="saveChange">保存修改</button>
@@ -68,13 +62,19 @@ export default {
       id:this.$route.params.id,
       goods:'',
       // spec:[],
-      states:['待付款','已付款，等待制作','制作完成，等待取餐'],
+      states:['待付款','已付款，等待制作','制作完成，等待取餐','已完成'],
       curSpecId:'',
       curStateId:'',
       temSpecId:'',
       temNum:0,
       temState:'',
-      amount:''
+      temStateId:0,
+      amount:'',
+      data:{
+
+        num:0,
+        status:0
+      }
     }
   },
   methods:{
@@ -102,10 +102,11 @@ export default {
         }
       }).then(result =>{
         console.log(result)
-        this.id = result.data.id
+        this.data.id = result.data.id
         this.goods = result.data.orderitemname
         this.amount = result.data.price
-        this.temNum = result.data.num
+        this.data.num = result.data.num
+        this.data.status = result.data.status-1
       })
     },
 
@@ -114,21 +115,45 @@ export default {
     },
 
     saveChange(){
-      const res = changeOrder({
-        id:this.$route.params.id,
-        state:this.temStateId,
-        spec:this.temSpecId,
-        num:this.temNum
-      });
-      res
-      .then(()=>{
-        alert('修改成功');
-        this.fetchOrderDetail(this.$route.params.id);
-      })
-      .catch((e)=>{
-        alert(e);
+    //   const res = changeOrder({
+    //     id:this.$route.params.id,
+    //     state:this.temStateId,
+    //     spec:this.temSpecId,
+    //     num:this.temNum
+    //   });
+    //   res
+    //   .then(()=>{
+    //     alert('修改成功');
+    //     this.fetchOrderDetail(this.$route.params.id);
+    //   })
+    //   .catch((e)=>{
+    //     alert(e);
+    //   })
+      console.log(this.data)
+      axios({
+        url:'http://localhost:8080/order/changeorder',
+        method:'PUT',
+        data:{
+          id:this.id,
+          num:this.data.num,
+          status:this.data.status
+        }
+      }).then(result =>{
+        if (result){
+        this.$notify.success({
+          title:'成功！',
+          message:'修改成功'
+          }
+        )
+        }else {
+          this.$notify.error({
+            title:'出错了！',
+            message:'修改失败'
+          })
+        }
       })
     }
+
   },
   mounted(){
     this.fetchOrderDetail(this.$route.params.id);

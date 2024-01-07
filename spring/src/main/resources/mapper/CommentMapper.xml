@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.spring.entity.Comment">
-        <id column="commentid" property="commentid" />
+        <id column="id" property="id" />
         <result column="userid" property="userid" />
         <result column="itemid" property="itemid" />
         <result column="itemname" property="itemname" />
@@ -15,7 +15,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        commentid, userid, itemid, itemname, rating, commentcontent, commenttime
+        id, userid, itemid, itemname, rating, commentcontent, commenttime
     </sql>
 
 </mapper>

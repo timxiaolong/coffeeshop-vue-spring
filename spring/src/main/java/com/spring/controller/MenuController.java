@@ -48,4 +48,10 @@ public class MenuController {
         wrapper.like(Menu::getName,Keyword);
         return menuService.list(wrapper);
     }
+
+    @PostMapping("changeGoods")
+    public boolean changeGoods(@RequestBody Menu menu){
+        System.out.println(menu);
+        return menuService.saveOrUpdate(menu);
+    }
 }

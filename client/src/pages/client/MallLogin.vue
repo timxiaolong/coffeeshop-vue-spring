@@ -71,7 +71,7 @@ export default {
             localStorage.setItem('username',result.data.param.name)
             localStorage.setItem('role',result.data.param.phone)
             localStorage.setItem('id',result.data.param.id)
-            this.$message("登录成功")
+            this.$message.success("登录成功")
             setTimeout("location.href=\"#/mall/show/index\"",3000)
           }else {
             this.$message.error("用户名或密码错误")

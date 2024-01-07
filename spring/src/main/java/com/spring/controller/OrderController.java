@@ -58,6 +58,15 @@ public class OrderController {
 
     @PutMapping("/changeorder")
     public boolean changeOrders(@RequestBody Orders orders){
-        return true;
+        System.out.println(orders);
+        Orders dbOrders = ordersService.getById(orders.getId());
+        dbOrders.setNum(orders.getNum());
+        dbOrders.setStatus(orders.getStatus());
+        return ordersService.updateById(dbOrders);
+    }
+
+    @DeleteMapping("/deleOrderById")
+    public boolean deleOrderById(@RequestParam Integer id){
+        return ordersService.removeById(id);
     }
 }

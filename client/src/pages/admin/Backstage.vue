@@ -69,6 +69,7 @@ export default {
     },
     logout(){
       this.adminLogout();
+      localStorage.clear()
       this.$router.push('/login');
     }
   },

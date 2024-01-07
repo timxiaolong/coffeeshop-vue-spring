@@ -30,4 +30,10 @@ public class ShoppingcarftController {
         lambdaQueryWrapper.eq(Shoppingcarft::getUserid,userid);
         return service.list(lambdaQueryWrapper);
     }
+
+    @PostMapping("/addToCarft")
+    public boolean addToCarft(@RequestBody Shoppingcarft sc){
+        System.out.println(sc);
+        return service.save(sc);
+    }
 }

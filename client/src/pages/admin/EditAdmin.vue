@@ -25,6 +25,7 @@
 import TextInput from '../../components/TextInput';
 import { changePwd } from '../../api/admin';
 import { mapState } from 'vuex';
+import axios from "axios";
 
 export default {
   name: 'EditAdmin',
@@ -44,29 +45,45 @@ export default {
     }
   },
   methods:{
-  	confirmChange(){
-  		const adminToken = this.adminToken;
-  		const oldPwd = this.oldPwd+'';
-  		const newPwd = this.newPwd+'';
-  		const confirmPwd = this.confirmPwd+'';
-  		const res = changePwd({
-  			adminToken,
-  			oldPwd,
-  			newPwd,
-  			confirmPwd
-  		});
-  		res
-  		.then(()=>{
-  			this.oldPwd = '';
-  			this.newPwd = '';
-  			this.confirmPwd = '';
-  			alert('修改成功！');
-  		})
-  		.catch((e)=>{
-  			alert(e);
-  		})
-  	}
-  }
+  	confirmChange() {
+      const adminToken = this.adminToken;
+      const oldPwd = this.oldPwd + '';
+      const newPwd = this.newPwd + '';
+      const confirmPwd = this.confirmPwd + '';
+      return axios({
+        url: 'http://localhost:8080/admin/changePwd',
+        method: 'POST',
+        params: {
+          id: localStorage.getItem('adminId'),
+          oldPwd,
+          newPwd,
+          confirmPwd
+        }
+      }).then(result =>{
+        if (result.status === 200){
+          this.$message.success(result.message)
+        }else {
+          this.$message.error(result.message)
+        }
+      })
+      // 	const res = changePwd({
+      // 		adminToken,
+      // 		oldPwd,
+      // 		newPwd,
+      // 		confirmPwd
+      // 	});
+      // 	res
+      // 	.then(()=>{
+      // 		this.oldPwd = '';
+      // 		this.newPwd = '';
+      // 		this.confirmPwd = '';
+      // 		alert('修改成功！');
+      // 	})
+      // 	.catch((e)=>{
+      // 		alert(e);
+      // 	})
+      }
+    }
 }
 </script>
 

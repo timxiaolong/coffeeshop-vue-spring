@@ -15,32 +15,11 @@
   				</div>
   				<div class="operate">
   					<div>{{item.commenttime}}</div>
-  					<button @click="reply(item.id)">删除</button>
+  					<button @click="dele(item.id)">删除</button>
   				</div>
   			</li>
   		</ul>
-<!--  		<ul class="msgList" v-else="curIndex===1">-->
-<!--  			<li v-for="(item,index) in repliedMsgList" :key="'replied'+item.id" class="clear">-->
-<!--  				<img :src="item.user.headimg" alt="" />-->
-<!--  				<div class="info">-->
-<!--  					<span class="name">{{item.user.name}}</span>-->
-<!--  					<div class="goods ellipsis">商品：{{item.goods.name}}</div>-->
-<!--  					<p>{{item.content}}</p>-->
-<!--  					<p class="replyContent">{{'回复内容：'+item.replyContent}}</p>-->
-<!--  				</div>-->
-<!--  				<div class="operate">-->
-<!--  					<div>{{item.time}}</div>-->
-<!--  					<span>已回复</span>-->
-<!--  				</div>-->
-<!--  			</li>-->
-<!--  		</ul>-->
   	</div>
-<!--  	<Popup title="回复留言" @popupClose="closePopup" v-show="popupShow">-->
-<!--  		<div class="popupContent" slot="popupContent">-->
-<!--  			<textarea ref="replyText" cols="30" rows="10" placeholder="请输入回复内容"></textarea>-->
-<!--  			<button @click="replyConfirm">确认</button>-->
-<!--  		</div>-->
-<!--  	</Popup>-->
   </div>
 </template>
 
@@ -88,32 +67,65 @@ export default {
   		})
   	},
   	getMsg(){
-  		// const res = getRepliedMsg();
-  		// res.then((msgs)=>{
-  		// 	this.repliedMsgList = msgs;
-  		// })
-  		// .catch((e)=>{
-  		// 	alert(e);
-  		// })
       axios({
         url:'http://localhost:8080/comment/getallcomm',
         method:'GET'
       }).then(result =>{
+        console.log(result.data)
         this.commList = result.data
       })
-      for (let i = 0; i < this.commList.length; i++) {
-        axios({
-          url:'http://localhost:8080/menu/getmenubyid',
-          method:'GET',
-          params:{
-            id: this.commList[i]
-          }
-        }).then(result =>{
-          console.log(result)
-          this.commList[i].itemname = result.data
-        })
-      }
+      console.log(this.commList)
+
+      // for (let i = 0; i <= this.commList.length; i++) {
+      //   console.log(this.commList)
+      //
+      //   //获取商品名称
+      //   axios({
+      //     url:'http://localhost:8080/menu/getmenubyid',
+      //     method:'GET',
+      //     params:{
+      //       id: this.commList[i].id
+      //     }
+      //   }).then(result =>{
+      //     console.log(result)
+      //     this.commList[i].itemname = result.data
+      //   })
+      //   //获取用户名称
+      //   axios({
+      //     url:'http://localhost:8080/user/getuserinfobyid',
+      //     method:'GET',
+      //     params:{
+      //       id:this.commList[i].userid
+      //     }
+      //   }).then(result =>{
+      //     console.log(result)
+      //     this.commList[i].userid = result.data.username
+      //   })
+      // }
   	},
+    dele(id){
+      console.log(id)
+      axios({
+        url:'http://localhost:8080/comment/deleById',
+        method:'DELETE',
+        params:{
+          id:id
+        }
+      }).then(result =>{
+        if (result){
+          this.$notify.success({
+            title:'成功！',
+            message:'成功删除一条信息'
+          })
+          this.getMsg()
+        }else {
+          this.$notify.error({
+            title:'错误',
+            message:'删除失败'
+          })
+        }
+      })
+    },
   	reply(id){
   		this.popupShow = true;
   		this.curMsgId = id;

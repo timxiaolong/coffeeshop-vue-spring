@@ -17,7 +17,7 @@
             <span>数量：</span>
             <NumberInput v-model="num" :min="1" :max="temStockNum"/>
           </div>
-          <button class="buyBtn" @click="buy">立即购买</button>
+          <button class="buyBtn" @click="centerDialogVisible = true">立即购买</button>
           <button @click="addToCart">加入购物车</button>
         </div>
       </div>
@@ -39,6 +39,20 @@
           <p>{{ item.commentcontent }}</p>
         </div>
       </section>
+      <el-dialog
+        title="提示"
+        :visible.sync="centerDialogVisible"
+        width="50%"
+        center
+      >
+        <div style="align-content: center;text-align: center" class="code ">
+          <img  src="../../assets/img/code2.png">
+        </div>
+        <span  slot="footer" class="dialog-footer">
+                <el-button @click="centerDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="centerDialogVisible = false; buy">确认已支付</el-button>
+              </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -99,7 +113,8 @@ export default {
       rate: '',
       commList: [],
       goodsList: [],
-      rating:[]
+      rating:[],
+      centerDialogVisible:false
     }
   },
 
@@ -124,21 +139,21 @@ export default {
         this.goodsDesc = data.data.describtion;
         this.goodsPrice = data.data.price;
         this.typeId = data.data.typeId;
-         this.getTypeGoodsList(data.typeId);
+         // this.getTypeGoodsList(data.typeId);
       }).catch(e => {
         console.dir(e)
       })
     },
 
     getGoodsMsg(id) {
-      const res = getGoodsMsg(id);
-      res
-        .then((data) => {
-          this.msgList = data
-        })
-        .catch((e) => {
-          alert(e);
-        })
+      // const res = getGoodsMsg(id);
+      // res
+      //   .then((data) => {
+      //     this.msgList = data
+      //   })
+      //   .catch((e) => {
+      //     alert(e);
+      //   })
     },
 
     addToCart() {
@@ -149,20 +164,30 @@ export default {
         });
         return;
       }
-      const res = addOrder({
-        token: this.clientToken,
-        goodsDetailId: this.temSpecId,
-        state: 0,
-        num: this.num,
-        amount: this.goodsPrice
-      });
-      res
-        .then(() => {
-          alert('加入购物车成功！请前往 个人中心->购物车 结算')
-        })
-        .catch((e) => {
-          alert(e);
-        })
+      axios({
+        url:'http://localhost:8080/shoppingcarft/addToCarft',
+        method:'POST',
+        data:{
+          id:null,
+          userid:localStorage.getItem('id'),
+          itemname:this.goodsName,
+          price:this.goodsPrice,
+          num:this.num,
+          amount: this.goodsPrice * this.num
+        }
+      }).then(result =>{
+        if (result){
+          this.$notify.success({
+            title:'成功',
+            message:'请在个人中心查看详情'
+          })
+        }else {
+          this.$notify.error({
+            title:'失败',
+            message:'加入购物车失败，请联系管理员'
+          })
+        }
+      })
     },
 
     buy() {
@@ -173,20 +198,6 @@ export default {
         });
         return;
       }
-      // const res = addOrder({
-      //   token: this.clientToken,
-      //   goodsDetailId: this.temSpecId,
-      //   num: this.num,
-      //   state: 1,
-      //   amount: this.goodsPrice
-      // });
-      // res
-      //   .then(() => {
-      //     alert('自动付款成功！请耐心等待包裹派送~')
-      //   })
-      //   .catch((e) => {
-      //     alert(e);
-      //   })
       axios({
         url:'http://localhost:8080/order/sendorder',
         method:'POST',
@@ -200,9 +211,15 @@ export default {
         }
       }).then(result =>{
         if (result){
-
+          this.$notify.success({
+            title:'下单成功！',
+            message:'请在个人中心查看订单详情'
+          })
         }else {
-
+          this.$notify.error({
+            title:'错误',
+            message:'请联系管理员'
+          })
         }
       })
     },
@@ -225,13 +242,13 @@ export default {
     },
 
     getTypeGoodsList(typeId) {
-      const res = getGoodsList(typeId);
-      res.then((data) => {
-        this.goodsList = data;
-      })
-        .catch((e) => {
-          alert(e);
-        })
+      // const res = getGoodsList(typeId);
+      // res.then((data) => {
+      //   this.goodsList = data;
+      // })
+      //   .catch((e) => {
+      //     alert(e);
+      //   })
     },
 
   },
@@ -246,7 +263,7 @@ export default {
   watch: {
     $route(to, from) {
       this.getGoodsInfo(to.params.id);
-      this.getGoodsMsg(to.params.id);
+      // this.getGoodsMsg(to.params.id);
       this.getComment(to.params.id);
     }
   }
@@ -370,7 +387,7 @@ export default {
 
       .commentBody {
         padding: 20px;
-        min-height: 300px;
+        min-height: 100px;
 
         .rateBox {
           margin-bottom: 10px;

@@ -23,7 +23,7 @@ public class Comment implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "评价id")
-    private Integer commentid;
+    private Integer id;
 
     @ApiModelProperty(value = "用户id")
     private Integer userid;
