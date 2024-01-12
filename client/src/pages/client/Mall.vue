@@ -4,8 +4,8 @@
       <div class="container clear">
         <span class="title" @click="navTo('/mall')">一见倾心咖啡点单平台</span>
         <NoticeList :notices="notices"/>
-        <div class="right" v-if="clientToken">
-          <span class="name">欢迎您，{{clientName}}</span>
+        <div class="right" v-if="local">
+          <span class="name">欢迎您，{{local}}</span>
           <span @click="navTo('/mall/personal')">个人中心</span>
           <span @click="logout">退出登录</span>
         </div>
@@ -101,7 +101,8 @@ export default {
       notices:['今日特惠：拿铁买一送一',
         '【福利】领8.8新会员券'],
       clientHeight:getClientSize().height,
-      shouldShowBT:false
+      shouldShowBT:false,
+      local:'',
     }
   },
 
@@ -116,6 +117,7 @@ export default {
       // this.clientLogout();
       localStorage.clear()
       this.$router.go(0);
+      this.local = ''
 
     },
     backToTop(){
@@ -133,6 +135,7 @@ export default {
 
   mounted(){
     document.addEventListener('scroll',this.watchScrollTop,false);
+    this.local = localStorage.getItem('username')
   },
 
   beforeDestroyed(){

@@ -49,9 +49,14 @@ public class MenuController {
         return menuService.list(wrapper);
     }
 
-    @PostMapping("changeGoods")
+    @PostMapping("/changeGoods")
     public boolean changeGoods(@RequestBody Menu menu){
         System.out.println(menu);
         return menuService.saveOrUpdate(menu);
+    }
+
+    @DeleteMapping("/deleById")
+    public boolean deleById(@RequestParam Integer id){
+        return menuService.removeById(id);
     }
 }

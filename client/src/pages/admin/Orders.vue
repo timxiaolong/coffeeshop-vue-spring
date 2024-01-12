@@ -66,13 +66,13 @@ export default {
         this.orderList = result.data
         console.log(this.orderList)
         for (let i = 0; i < this.orderList.length; i++) {
-          if (this.orderList[i].status === 1){
+          if (this.orderList[i].status === 0){
             this.orderList[i].status = '待付款'
-          }else if (this.orderList[i].status === 2){
+          }else if (this.orderList[i].status === 1){
             this.orderList[i].status = '待制作'
-          }else if (this.orderList[i].status === 3){
+          }else if (this.orderList[i].status === 2){
             this.orderList[i].status = '待取餐'
-          }else if (this.orderList[i].status === 4){
+          }else if (this.orderList[i].status === 3){
             this.orderList[i].status = '已完成'
           }
         }

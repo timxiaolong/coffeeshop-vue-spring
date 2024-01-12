@@ -27,15 +27,15 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/login")
-    public Message Login(@RequestParam("username") String name, @RequestParam("password") String password){
+    public Message Login(@RequestParam("email") String email, @RequestParam("password") String password){
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.like(User::getName,name);
+        lambdaQueryWrapper.eq(User::getEmail,email);
         try {
-            List<User> dbUser= userService.list(lambdaQueryWrapper);
-            if (!dbUser.get(0).getPassword().equals(password)){//如果密码不对
+            User dbUser = userService.getOne(lambdaQueryWrapper);
+            if (!dbUser.getPassword().equals(password) || dbUser == null){//如果密码不对
                 return new Message("账号或密码不正确",400,null);
             }else {
-                return new Message("登陆成功",200,dbUser.get(0));
+                return new Message("登陆成功",200,dbUser);
             }
         }catch (Exception e){
                 return new Message("账号或者密码不正确",400,null);
@@ -45,8 +45,19 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public boolean Signin(@RequestBody User user){
-        return userService.save(user);
+    public Message Signin(@RequestBody User user){
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(User::getEmail,user.getEmail());
+        User dbUser = userService.getOne(lambdaQueryWrapper);
+        if (dbUser == null){
+            if (userService.save(user)){
+                return new Message("注册成功!",200,user);
+            }else {
+                return new Message("注册失败，请联系管理员",500,null);
+            }
+        }else {
+            return new Message("当前邮箱已被注册，请直接登陆或更换其他邮箱",500,null);
+        }
     }
 
     @PostMapping("/changepwd")

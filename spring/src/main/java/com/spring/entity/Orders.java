@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,6 +29,7 @@ public class Orders implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "订单id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     @ApiModelProperty(value = "下单时间")
@@ -41,6 +45,9 @@ public class Orders implements Serializable {
     @ApiModelProperty(value = "下单商品")
     private String orderitemname;
 
+    @ApiModelProperty(value = "下单商品id")
+    private Integer orderitemid;
+
     @ApiModelProperty(value = "数量")
     private Integer num;
 
@@ -52,4 +59,11 @@ public class Orders implements Serializable {
 
     @ApiModelProperty(value = "订单状态")
     private Integer status;
+
+    @ApiModelProperty(value = "评价状态")
+    @TableField("hasComm")
+    private String hascomm;
+
+    @ApiModelProperty(value = "商品照片")
+    private String picture;
 }

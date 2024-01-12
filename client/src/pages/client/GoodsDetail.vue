@@ -15,9 +15,9 @@
           </div>
           <div class="infoBox">
             <span>数量：</span>
-            <NumberInput v-model="num" :min="1" :max="temStockNum"/>
+            <NumberInput v-model="num" :min="1" :max="99"/>
           </div>
-          <button class="buyBtn" @click="centerDialogVisible = true">立即购买</button>
+          <button class="buyBtn" @click="buyNow">立即购买</button>
           <button @click="addToCart">加入购物车</button>
         </div>
       </div>
@@ -35,7 +35,7 @@
             text-color="#ff9900"
             :score-template="item.rating"
           ></el-rate>
-          <p>匿名用户</p><br/>
+          <p style="padding-top: 10px">{{item.username}}</p><br/>
           <p>{{ item.commentcontent }}</p>
         </div>
       </section>
@@ -46,11 +46,12 @@
         center
       >
         <div style="align-content: center;text-align: center" class="code ">
+          <h1 class="price" style="color: #be4141">{{ '请支付：¥' + goodsPrice * num }}</h1>
           <img  src="../../assets/img/code2.png">
         </div>
         <span  slot="footer" class="dialog-footer">
                 <el-button @click="centerDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="centerDialogVisible = false; buy">确认已支付</el-button>
+                <el-button type="primary" @click="centerDialogVisible = false; buy()">确认已支付</el-button>
               </span>
       </el-dialog>
     </div>
@@ -122,7 +123,13 @@ export default {
     changeIndex(i) {
       this.curIndex = i;
     },
-
+    buyNow(){
+      if (localStorage.getItem('id') == null){
+        this.$notify.error('您还没有登陆，请先登陆后再试')
+        return
+      }
+      this.centerDialogVisible = true
+    },
     getGoodsInfo(id) {
       const id_i = Number(id)
       console.log(id)
@@ -146,14 +153,7 @@ export default {
     },
 
     getGoodsMsg(id) {
-      // const res = getGoodsMsg(id);
-      // res
-      //   .then((data) => {
-      //     this.msgList = data
-      //   })
-      //   .catch((e) => {
-      //     alert(e);
-      //   })
+
     },
 
     addToCart() {
@@ -171,9 +171,11 @@ export default {
           id:null,
           userid:localStorage.getItem('id'),
           itemname:this.goodsName,
+          itemid:this.id,
           price:this.goodsPrice,
           num:this.num,
-          amount: this.goodsPrice * this.num
+          amount: this.goodsPrice * this.num,
+          picture: this.goodsImg
         }
       }).then(result =>{
         if (result){
@@ -202,12 +204,14 @@ export default {
         url:'http://localhost:8080/order/sendorder',
         method:'POST',
         data:{
-          ordertime: moment().format('YYYY-MM-DD HH:mm:ss'),
           orderuserid: localStorage.getItem('id'),
           orderusername: localStorage.getItem('username'),
-          pretime: moment().add(30,'m').format('YYYY-MM-DD HH:mm:ss'),
+          orderitemname: this.goodsName,
+          orderitemid: this.id,
+          num:this.num,
           price: this.goodsPrice,
-          status:0
+          picture: this.goodsImg,
+
         }
       }).then(result =>{
         if (result){

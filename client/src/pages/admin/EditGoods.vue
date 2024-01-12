@@ -73,6 +73,7 @@ export default {
         }
       ],
       form: {
+        id:0,
         name: '',
         price: 0,
         picture:'',
@@ -196,18 +197,19 @@ export default {
     if(this.id==='new'){
 
     }else{
-      const res = getGoodsInfo(this.id);
-      res
-      .then((data)=>{
-        this.temTypeId = data.goods.typeId;
-        this.initTypeId = data.goods.typeId;
-        this.goodsName = data.goods.name;
-        this.goodsImg = data.goods.img;
-        this.desc = data.goods.desc;
-        this.specList = data.specs;
-      })
-      .catch((e)=>{
-        alert(e);
+      axios({
+        url:'http://localhost:8080/menu/getmenubyid',
+        method:'GET',
+        params:{
+          id:this.id
+        }
+      }).then(result=>{
+          this.form.id = result.data.id
+          this.form.name = result.data.name
+          this.form.price = result.data.price;
+          this.form.picture = result.data.picture;
+          this.form.typeid = result.data.typeid;
+          this.form.describtion = result.data.describtion;
       })
     }
   }

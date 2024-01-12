@@ -9,9 +9,9 @@
   			<li v-for="(item,index) in commList" :key="'noReply'+item.id" class="clear">
 <!--  				<img :src="item.user.headimg" alt="" />-->
   				<div class="info">
-  					<span class="name">{{item.userid}}</span>
+  					<span class="name">{{item.username}}</span>
   					<div class="goods ellipsis">商品：{{item.itemname}}</div>
-  					<p>{{item.commentcontent}}</p>
+  					<p>评分：{{item.rating}} 评价：{{item.commentcontent}}</p>
   				</div>
   				<div class="operate">
   					<div>{{item.commenttime}}</div>
@@ -66,13 +66,26 @@ export default {
   			alert(e);
   		})
   	},
+    formattedDate(dateStamp){
+      const date = new Date(dateStamp)
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const hour = date.getHours().toString().padStart(2, '0');
+      const minute = date.getMinutes().toString().padStart(2, '0');
+      const second = date.getSeconds().toString().padStart(2, '0');
+      const formattedDate = `${year}年${month}月${day}日 ${hour}:${minute}:${second}`;
+      return formattedDate
+    },
   	getMsg(){
       axios({
         url:'http://localhost:8080/comment/getallcomm',
         method:'GET'
       }).then(result =>{
-        console.log(result.data)
         this.commList = result.data
+        for (let i = 0; i < this.commList.length; i++) {
+          this.commList[i].commenttime = this.formattedDate(this.commList[i].commenttime)
+        }
       })
       console.log(this.commList)
 
@@ -196,7 +209,7 @@ export default {
 				}
 				.info{
 					display: inline-block;
-					margin-left: 70px;
+					margin-left: 0px;
 					max-width: 820px;
 					font-size: 13px;
 					.name{
@@ -216,7 +229,7 @@ export default {
 				}
 				.operate{
 					display: inline-block;
-					width: 150px;
+					width: 250px;
 					height: 60px;
 					position: absolute;
 					margin-top: -30px;

@@ -70,7 +70,7 @@ export default {
     logout(){
       this.adminLogout();
       localStorage.clear()
-      this.$router.push('/login');
+      location.href = "http://localhost:8081"
     }
   },
   watch:{
@@ -79,6 +79,12 @@ export default {
     }
   },
   mounted() {
+    if (localStorage.getItem('adminId') === null){
+      this.$message.error('当前未登录，即将跳转主页')
+      setTimeout(()=>{
+        location.href = "http://localhost:8081"
+      },3000)
+    }
     this.adminName = localStorage.getItem('username')
   }
 }

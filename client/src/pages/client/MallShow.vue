@@ -64,7 +64,7 @@ export default {
     return {
       typeList:[],
       searchText:'',
-      tips:['aa','bb','cc'],
+      tips:[],
       navShouldFixed:false,
     }
   },

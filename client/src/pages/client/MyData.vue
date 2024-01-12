@@ -13,11 +13,6 @@
         <span>密码</span>
         <button @click="dialogFormVisible = true">修改密码</button>
       </li>
-      <li>
-        <span>会员身份</span>
-        <span>您还不是会员哦~</span>
-        <button @click="dialogVipVisble = true">办理会员</button>
-      </li>
     </ul>
     <button @click="updateUserData" class="saveBtn">保存</button>
 
@@ -39,21 +34,6 @@
       </div>
     </el-dialog>
 
-    <el-dialog
-      title="提示"
-      :visible.sync="dialogVipVisble"
-      width="50%"
-      center
-    >
-      <div style="align-content: center;text-align: center" class="code ">
-        <span>会费10元/月，请按需办理，扫码支付，感谢对网站的支持！</span><br/><br/>
-        <img class="payImg" src="../../assets/img/code2.png">
-      </div>
-      <span  slot="footer" class="dialog-footer">
-                <el-button @click="dialogVipVisble = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVipVisble = false">我已付款，确认办理</el-button>
-              </span>
-    </el-dialog>
   </div>
 </template>
 

@@ -8,12 +8,12 @@
         <result column="name" property="name" />
         <result column="password" property="password" />
         <result column="phone" property="phone" />
-        <result column="isVip" property="isvip" />
+        <result column="email" property="email" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, password, phone, isVip
+        id, name, password, phone, email
     </sql>
 
 </mapper>

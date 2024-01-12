@@ -7,14 +7,16 @@
         <result column="id" property="id" />
         <result column="userid" property="userid" />
         <result column="itemname" property="itemname" />
+        <result column="itemid" property="itemid" />
         <result column="price" property="price" />
         <result column="num" property="num" />
         <result column="amount" property="amount" />
+        <result column="picture" property="picture" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, userid, itemname, price, num, amount
+        id, userid, itemname, itemid, price, num, amount, picture
     </sql>
 
 </mapper>

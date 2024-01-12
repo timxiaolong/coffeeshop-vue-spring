@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -35,6 +36,9 @@ public class Shoppingcarft implements Serializable {
     @ApiModelProperty(value = "商品名")
     private String itemname;
 
+    @ApiModelProperty(value = "商品id")
+    private Integer itemid;
+
     @ApiModelProperty(value = "价格")
     private BigDecimal price;
 
@@ -43,6 +47,9 @@ public class Shoppingcarft implements Serializable {
 
     @ApiModelProperty(value = "总价")
     private Integer amount;
+
+    @ApiModelProperty(value = "图片")
+    private String picture;
 
 
 }

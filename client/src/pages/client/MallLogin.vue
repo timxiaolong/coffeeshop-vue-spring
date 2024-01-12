@@ -7,14 +7,15 @@
         <span @click="setIndex(1)" :class="{selected:curIndex===1}">注册</span>
       </div>
       <div class="formBox" v-show="curIndex===0">
-        <input class="name" type="text" placeholder="账号"/>
+        <input class="email" type="text" placeholder="邮箱"/>
         <input class="password" type="password" placeholder="密码"/>
         <button @click="login">登录</button>
       </div>
       <form class="signin-form" v-show="curIndex===1">
-        <input class="username" type="text" placeholder="请输入昵称"/>
-        <input class="password" type="password" placeholder="请输入密码"/>
-        <input class="phonenumber" type="text" placeholder="请输入注册手机号"/>
+        <input class="signName" type="text" placeholder="请输入昵称"/>
+        <input class="signEmail" type="text"  placeholder="请输入邮箱"/>
+        <input class="signPwd" type="password" placeholder="请输入密码"/>
+        <input class="signPhNum" type="text"  placeholder="请输入注册手机号"/>
         <button @click="signup">注册</button>
       </form>
 <!--      <div class="formBox" v-show="curIndex===1">-->
@@ -56,17 +57,20 @@ export default {
     },
     login() {
       console.log("login")
-      const name = document.querySelector('.name').value
+      const email = document.querySelector('.email').value
       const password = document.querySelector('.password').value
+      if (email === '' || password === ''){
+        this.$message.error('请填写所有信息再尝试登陆')
+        return
+      }
         axios({
           url:'http://localhost:8080/user/login',
           method: 'GET',
           params: {
-            username: name,
+            email:email,
             password: password
           }
         }).then(result => {
-          console.log(result)
           if (result.data.status === 200){
             localStorage.setItem('username',result.data.param.name)
             localStorage.setItem('role',result.data.param.phone)
@@ -79,21 +83,40 @@ export default {
         }).catch(err => {
           console.dir(err)
         })
-
-
     },
     signup() {
-      const form = document.querySelector('.signin-form')
-      const data = serialize(form,{hash:true, empty: true})
+      const name = document.querySelector('.signName').value
+      const password = document.querySelector('.signPwd').value
+      const phone =document.querySelector('.signPhNum').value
+      const email =document.querySelector('.signEmail').value
+      if(name === '' || password === '' || phone === '' || email ===''){
+        this.$message.error('请填写所有信息再尝试注册')
+        return
+      }
       axios({
-        url:"http://localhost:8080/user//signin",
+        url:"http://localhost:8080/user/signin",
         method:"POST",
-        data:data
+        data:{
+          name,
+          password,
+          phone,
+          email
+        }
       }).then(result =>{
-        console.log("success")
-      }).catch(err =>{
-        console.dir(err)
+        if (result.data.status === 200){
+          this.$message.success(result.data.message)
+          setTimeout(()=>{
+            this.curIndex = 0
+            document.querySelector('.signName').value = ''
+            document.querySelector('.signPwd').value = ''
+            document.querySelector('.signPhNum').value = ''
+            document.querySelector('.signEmail').value = ''
+          },3000)
+        }else {
+          this.$message.error(result.data.message)
+        }
       })
+
     }
   }
 }

@@ -37,9 +37,8 @@ public class User implements Serializable {
     @ApiModelProperty(value = "手机号")
     private String phone;
 
-    @ApiModelProperty(value = "是否是VIP")
-    @TableField("isVip")
-    private Integer isvip;
+    @ApiModelProperty(value = "邮箱")
+    private String email;
 
 
 }

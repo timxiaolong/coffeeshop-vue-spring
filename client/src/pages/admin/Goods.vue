@@ -2,7 +2,7 @@
   <div class="Goods">
     <header class="clear">
   		<span>商品管理</span>
-  		<button @click="addType">添加类目</button>
+<!--  		<button @click="addType">添加类目</button>-->
   	</header>
   	<Tag :tagList="tagTextList" @indexChange="changeTag"/>
   	<div class="content">
@@ -23,12 +23,12 @@
   			</li>
   		</ul>
   	</div>
-  	<Popup title="增加类目" @popupClose="closePopup" v-show="popupShow">
-  		<div class="popupContent" slot="popupContent">
-  			<input type="text" ref="typeInput" placeholder="请输入类目名称" />
-  			<button @click="addConfirm">确认</button>
-  		</div>
-  	</Popup>
+<!--  	<Popup title="增加类目" @popupClose="closePopup" v-show="popupShow">-->
+<!--  		<div class="popupContent" slot="popupContent">-->
+<!--  			<input type="text" ref="typeInput" placeholder="请输入类目名称" />-->
+<!--  			<button @click="addConfirm">确认</button>-->
+<!--  		</div>-->
+<!--  	</Popup>-->
   </div>
 </template>
 
@@ -117,17 +117,37 @@ export default {
   		this.$router.push(route);
   	},
     deleteGoods(id){
-      const res = deleteGoods(id);
-      res
-      .then(()=>{
-        this.goodsList.map((item,index)=>{
-          if(item.id===id){
-            this.goodsList.splice(index,1)
-          }
-        })
-      })
-      .catch((e)=>{
-        alert(e);
+      // const res = deleteGoods(id);
+      // res
+      // .then(()=>{
+      //   this.goodsList.map((item,index)=>{
+      //     if(item.id===id){
+      //       this.goodsList.splice(index,1)
+      //     }
+      //   })
+      // })
+      // .catch((e)=>{
+      //   alert(e);
+      // })
+      axios({
+        url:'http://localhost:8080/menu/deleById',
+        method:'DELETE',
+        params:{
+          id:id
+        }
+      }).then(result =>{
+        if (result){
+          this.$notify.success({
+            title:'成功！',
+            message:'成功删除一条数据'
+          })
+          this.getTypes();
+        }else {
+          this.$notify.error({
+            title:'错误',
+            message:'删除失败，请联系IT'
+          })
+        }
       })
     },
   },

@@ -7,6 +7,7 @@ import com.spring.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -39,6 +40,12 @@ public class CommentController {
     @DeleteMapping("/deleById")
     public boolean deleById(@RequestParam Integer id){
         return commentService.removeById(id);
+    }
+
+    @PostMapping("/addComment")
+    public boolean addComment(@RequestBody Comment comment){
+        comment.setCommenttime(LocalDateTime.now());
+        return commentService.save(comment);
     }
 
 }

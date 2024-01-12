@@ -11,7 +11,7 @@
       <ul class="orderList">
         <li v-for="(item,index) in orderList" :key="'order'+item.id">
           <div class="orderDetail">
-            <img src="https://pic1.zhimg.com/80/v2-f206ad69d46466554afb9c69a4dbaaa0_720w.webp" alt="商品图片" />
+            <img :src=item.picture alt="商品图片" />
             <div class="goodsName" style="text-align: center">
               <p @click="navTo('/mall/goods/'+item.goods.id)">{{item.itemname}}</p>
             </div>
@@ -19,8 +19,8 @@
             <span class="num">
               <NumberInput
                 @changeHandle="numberChange(item.id)"
-                :initNum="item.temGoodsNum"
-                v-model="item.temGoodsNum"
+                :initNum="item.num"
+                v-model="item.num"
                 :min="1"
                 :max="999"
               />
@@ -46,6 +46,7 @@ import { mapState } from 'vuex';
 import {getOrderByState,deleteOrder,settleAccounts} from '../../api/client';
 import NumberInput from '../../components/NumberInput';
 import axios from "axios";
+import {id} from "html-webpack-plugin/lib/chunksorter";
 
 export default {
   name: 'Cart',
@@ -87,54 +88,91 @@ export default {
     numberChange(orderId){
       this.orderList.map((item,index)=>{
         if(orderId===item.id){
-          item.amount = item.temGoodsNum*item.goods.unitPrice;
-      console.log(item.temGoodsNum,item.goods.unitPrice)
+          item.amount = item.num*item.price;
+          console.log(item.temGoodsNum,item.goods.unitPrice)
         }
       })
     },
     deleteOrder(orderId){
-      const res = deleteOrder(orderId);
-      res
-      .then(()=>{
-        alert('删除订单成功！');
-        this.orderList.map((item,index)=>{
-          if(item.id===orderId){
-            this.orderList.splice(index,1);
-          }
-        })
-      })
-      .catch((e)=>{
-        alert(e);
+      // const res = deleteOrder(orderId);
+      // res
+      // .then(()=>{
+      //   alert('删除订单成功！');
+      //   this.orderList.map((item,index)=>{
+      //     if(item.id===orderId){
+      //       this.orderList.splice(index,1);
+      //     }
+      //   })
+      // })
+      // .catch((e)=>{
+      //   alert(e);
+      // })
+      axios({
+        url:'http://localhost:8080/shoppingcarft/deleteById',
+        method:'DELETE',
+        params:{
+          id:orderId
+        }
+      }).then(result =>{
+        if (result){
+          this.$notify.success({
+            title:'成功',
+            message:'成功删除一条数据'
+          })
+          this.getCarft();
+
+        }else {
+          this.$notify.error({
+            title:'失败',
+            message:'删除失败，请重试'
+          })
+        }
       })
     },
     navTo(route){
       this.$router.push(route);
     },
+    cleanCarft(id){
+      axios({
+        url:'http://localhost:8080/shoppingcarft/clean',
+        method:'DELETE',
+        params:{
+          userId:id
+        }
+      })
+    },
     settleAccounts(){
       let cartList = [];
       this.orderList.map((item,index)=>{
         cartList.push({
-          id:item.id,
-          goodsNum:item.temGoodsNum,
-          amount:item.amount
+          // id:item.id,
+          orderusername:localStorage.getItem('username'),
+          orderuserid:localStorage.getItem('id'),
+          orderitemid:item.itemid,
+          orderitemname:item.itemname,
+          price:item.price,
+          num:item.num,
+          amount:item.price * item.temGoodsNum,
+          picture:item.picture
         })
       });
-      const res = settleAccounts({
-        cartList:cartList
-      });
-      res
-      .then(()=>{
-        alert('下单成功！');
-        this.orderList = [];
-      })
-      .catch((e)=>{
-        alert(e);
+      axios({
+        url:'http://localhost:8080/order/sendOrders',
+        method:'POST',
+        data:cartList
+      }).then(result =>{
+        if (result){
+          this.$message.success('下单成功，请到订单查看')
+          this.cleanCarft(localStorage.getItem('id'))
+        }else {
+          this.$message.error('下单失败，请联系管理员')
+        }
+        this.orderList=[]
       })
     }
   },
 
   mounted(){
-    // this.getOrderByState(0);
     this.getCarft();
   },
 }

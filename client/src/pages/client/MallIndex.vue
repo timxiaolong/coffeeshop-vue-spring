@@ -25,7 +25,7 @@
       </Slick>
     </section>
     <section class="flashSale section">
-      <SectionHeader title="限时购" tips="抢抢抢，好货不等人" moreText="更多抢购>"/>
+      <SectionHeader title="限时购" tips="限时特惠手慢无" moreText="更多抢购>"/>
       <div class="content">
         <div class="left">
           <p class="title">特价场</p>
@@ -49,7 +49,7 @@
               </div>
               <div class="price">
                 <span class="nowPrice">限时价¥{{item.price}}</span>
-                <span class="beforePrice">原价¥{{item.price+60}}</span>
+                <span class="beforePrice">原价¥{{item.price+8}}</span>
               </div>
               <div class="buyBtn" @click="navTo('/mall/goods/'+item.id)">立即抢购</div>
             </div>
@@ -58,7 +58,7 @@
       </div>
     </section>
     <section class="hotGoods section">
-      <SectionHeader title="人气推荐" tips="最新最热的饮品都在这里！" moreText="更多推荐>"/>
+      <SectionHeader title="人气推荐" tips="快来寻找属于你自己的“心上饮”" moreText="更多推荐>"/>
       <div class="content">
         <ul class="left">
           <GoodsItem
