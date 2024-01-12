@@ -80,8 +80,8 @@
       <p>确定删除订单？</p>
       <div slot="footer" class="dialog-footer">
         <el-button @click="outerVisible = false">取 消</el-button>
-        <el-button type="primary" v-if="curStatus === 0 " @click="deleteOrder(curOrderId)">确定删除(待付</el-button>
-        <el-button type="primary" v-if="curStatus !== 0" @click="innerVisible = true">确定删除（已付</el-button>
+        <el-button type="primary" v-if="curStatus === 0 " @click="deleteOrder(curOrderId)">确定删除</el-button>
+        <el-button type="primary" v-if="curStatus !== 0" @click="innerVisible = true">确定删除</el-button>
       </div>
     </el-dialog>
     <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
